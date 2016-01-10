@@ -1,0 +1,19 @@
+<h1>Objects</h1> 
+<table border = 1px cellpadding="3" style="font-family:Arial"> 
+<tr> 
+<th>address_id</th>
+<th>city</th> 
+<th>street</th>
+<th>numb</th> 
+<th>postal_code</th>
+</tr> 
+{% for object in Object %} 
+<tr> 
+<td>{{object.address.id}}</td> 
+<td>{{object.address.city}}</td> 
+<td>{{object.address.street}}</td> 
+<td>{{object.address.numb}}</td> 
+<td>{{object.address.postal_code}}</td> 
+</tr> 
+{% endfor %} 
+</table>

@@ -8,10 +8,11 @@
 from __future__ import unicode_literals
 
 from django.db import models
+from django.contrib.auth.models import User
 
 
 class Address(models.Model):
-    id = models.BigIntegerField(primary_key=True)
+    id = models.AutoField(primary_key=True)
     city = models.CharField(max_length=64)
     street = models.CharField(max_length=64)
     numb = models.CharField(max_length=20)
@@ -23,7 +24,7 @@ class Address(models.Model):
 
 
 class Event(models.Model):
-    id = models.BigIntegerField(primary_key=True)
+    id = models.AutoField(primary_key=True)
     name = models.CharField(max_length=64)
     place = models.ForeignKey('Object', models.DO_NOTHING, db_column='place')
     max_tickets = models.BigIntegerField()
@@ -35,7 +36,7 @@ class Event(models.Model):
 
 
 class Object(models.Model):
-    id = models.BigIntegerField(primary_key=True)
+    id = models.AutoField(primary_key=True)
     address = models.ForeignKey(Address, models.DO_NOTHING, db_column='address')
 
     class Meta:
@@ -44,7 +45,7 @@ class Object(models.Model):
 
 
 class Ordr(models.Model):
-    id = models.BigIntegerField(primary_key=True)
+    id = models.AutoField(primary_key=True)
     usr = models.ForeignKey('Usr', models.DO_NOTHING, db_column='usr')
     event = models.ForeignKey(Event, models.DO_NOTHING, db_column='event')
     status = models.ForeignKey('Status', models.DO_NOTHING, db_column='status')
@@ -55,7 +56,7 @@ class Ordr(models.Model):
 
 
 class Privilige(models.Model):
-    id = models.BigIntegerField(primary_key=True)
+    id = models.AutoField(primary_key=True)
     value = models.CharField(max_length=5)
 
     class Meta:
@@ -64,8 +65,8 @@ class Privilige(models.Model):
 
 
 class Status(models.Model):
+    id = models.AutoField(primary_key=True)
     value = models.CharField(max_length=64)
-    id = models.BigIntegerField(primary_key=True)
 
     class Meta:
         managed = False
@@ -73,13 +74,11 @@ class Status(models.Model):
 
 
 class Usr(models.Model):
-    id = models.BigIntegerField(primary_key=True)
+    user = models.OneToOneField(User)
+
+    id = models.AutoField(primary_key=True)
     address = models.ForeignKey(Address, models.DO_NOTHING, db_column='address')
-    email = models.CharField(max_length=64)
     phone = models.CharField(max_length=64, blank=True, null=True)
-    priviliges = models.ForeignKey(Privilige, models.DO_NOTHING, db_column='priviliges')
-    login = models.CharField(max_length=64)
-    passwd = models.CharField(max_length=64)
 
     class Meta:
         managed = False
@@ -87,10 +86,11 @@ class Usr(models.Model):
 
 
 class Usrobject(models.Model):
-    id = models.BigIntegerField(primary_key=True)
+    id = models.AutoField(primary_key=True)
     usr = models.ForeignKey(Usr, models.DO_NOTHING, db_column='usr')
     object = models.ForeignKey(Object, models.DO_NOTHING, db_column='object')
 
     class Meta:
         managed = False
         db_table = 'usrobject'
+
