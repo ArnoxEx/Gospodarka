@@ -65,11 +65,9 @@ def register(request):
             # Now we save the Usr model instance.
             usr.save()
 
-            groups = Group.objects.get(name="Oridinary")
-            if groups:
-                print("group find")
-                print(groups.id)
-                user.groups.add(groups.id)
+            group = Group.objects.get(name="Oridinary")
+            if group:
+                user.group.add(groups.id)
                 user.save()
 
             # Update our variable to tell the template registration was successful.
@@ -146,8 +144,39 @@ def user_logout(request):
 def objects(request):
     context = RequestContext(request)
 
+    is_manager = False
+    if request.user.groups.filter(name='Manager').exists():
+        print("is_manager")
+        is_manager = True
+
     objects = Object.objects.order_by('address__city')
-    context_dict = {'objects': objects}
+    context_dict = {'objects': objects, 'is_manager': is_manager}
 
     return render_to_response('objects.html', context_dict, context)
 
+def add_object(request):
+    context = RequestContext(request)
+
+    created    = False
+
+    if request.method == 'POST':
+        address_form = AddressForm(data=request.POST)
+        object_form = ObjectForm(data=request.POST)
+
+        if address_form.is_valid():
+            adr = address_form.save()
+            obj = object_form.save(commit=False)
+            obj.address = adr
+            obj.save()
+
+            created = True
+
+        else:
+            print (address_form.errors)
+    else:
+        object_form  = ObjectForm()
+        address_form = AddressForm()
+
+    return render_to_response('add_object.html'
+            , {'object_form' : object_form, 'address_form' : address_form, 'created': created}
+            , context)

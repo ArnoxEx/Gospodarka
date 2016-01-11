@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Dobre Wydarzenie</title>
+    </head>
+
+    <body>
+        {% if created %}
+        <a href="/gospodarkaApp">Return to the homepage.</a><br />
+        {% else %}
+
+        <form id="object_form" method="post" action="add_object"
+                enctype="multipart/form-data">
+
+            {% csrf_token %}
+            {{ object_form.as_p }}
+            {{ address_form.as_p }}
+
+            <input type="submit" name="submit" value="Dodaj obiekt" />
+        </form>
+        {% endif %}
+    </body>
+</html>

@@ -38,6 +38,7 @@ class Event(models.Model):
 class Object(models.Model):
     id = models.AutoField(primary_key=True)
     address = models.ForeignKey(Address, models.DO_NOTHING, db_column='address')
+    name = models.CharField(max_length=64)
 
     class Meta:
         managed = False

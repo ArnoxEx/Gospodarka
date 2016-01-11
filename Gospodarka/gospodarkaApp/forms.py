@@ -19,3 +19,8 @@ class AddressForm(forms.ModelForm):
     class Meta:
         model = Address
         fields = ('city', 'street', 'numb', 'postal_code',)
+
+class ObjectForm(forms.ModelForm):
+    class Meta:
+        model = Object
+        fields = ('name',)

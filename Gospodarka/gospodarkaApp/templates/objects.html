@@ -10,14 +10,16 @@
         {% if objects %}
             <ul>
                 {% for object in objects %}
-                <li>{{object.address.city}}</li> 
-                <li>{{object.address.street}}</li> 
-                <li>{{object.address.numb}}</li> 
-                <li>{{object.address.postal_code}}</li> 
+                <li>{{object.name}}</li>
                 {% endfor %}
             </ul>
         {% else %}
             <strong>Aktualnie nie posiadamy żadnych obiektów</strong>
+        {% endif %}
+        {% if is_manager %}
+            <div class="AddObject">
+              <a href="add_object">Dodaj nowy obiekt</a><br />
+            </div>
         {% endif %}
     </body>
 </html>
