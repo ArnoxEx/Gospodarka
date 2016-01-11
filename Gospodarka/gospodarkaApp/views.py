@@ -145,18 +145,21 @@ def objects(request):
 
     is_manager = False
     if request.user.groups.filter(name='Manager').exists():
-        print("is_manager")
+        print("is manager")
         is_manager = True
+    else:
+        print('is not manager')
 
     objects = Object.objects.order_by('address__city')
     context_dict = {'objects': objects, 'is_manager': is_manager}
 
     return render_to_response('objects.html', context_dict, context)
 
+@login_required
 def add_object(request):
     context = RequestContext(request)
 
-    created    = False
+    created = False
 
     if request.method == 'POST':
         address_form = AddressForm(data=request.POST)
@@ -167,6 +170,9 @@ def add_object(request):
             obj = object_form.save(commit=False)
             obj.address = adr
             obj.save()
+            usr = Usr.objects.get(user=request.user)
+            usrobject = Usrobject(usr=usr, object=obj)
+            usrobject.save()
 
             created = True
 
