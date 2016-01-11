@@ -1,25 +1,27 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
   <head>
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-    <title>Happenings</title>
-    <link rel="stylesheet" href="css/style.css">
+      <title>Dobre Wydarzenie</title>
   </head>
+
   <body>
     <section class="Login/Register">
       {% if user.is_authenticated %}
-      <div class="Logout">
-        <a href="logout">Log out</a><br />
-      </div>
+        <div class="Logout">
+          <a href="logout">Log out</a><br />
+        </div>
       {% else %}
-      <div class="Login">
-        <a href="login">Log in here</a><br />
-      </div>
-      <div class="Register">
-        If not registered <a href="register">register here</a><br />
-      </div>
+        <div class="Login">
+          <a href="login">Log in here</a><br />
+        </div>
+        <div class="Register">
+          If not registered <a href="register">register here</a><br />
+        </div>
       {% endif %}
+      <br />
+      <div class="Objects">
+        <a href="objects">Obiekty</a><br />
+      </div>
     </section>
   </body>
 </html>

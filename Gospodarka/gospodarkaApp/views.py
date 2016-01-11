@@ -9,6 +9,7 @@ from django.shortcuts import render_to_response
 from django.views.decorators.csrf import ensure_csrf_cookie
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
+from django.contrib.auth.models import Group
 @ensure_csrf_cookie
 
 
@@ -44,7 +45,7 @@ def register(request):
         # If all forms are valid...
         if user_form.is_valid() and usr_form.is_valid() and address_form.is_valid():
             # Save the user's form data to the database.
-            user = user_form.save()
+            user = user_form.save(commit=False)
 
             # Now we hash the password with the set_password method.
             # Once hashed, we can update the user object.
@@ -63,6 +64,13 @@ def register(request):
 
             # Now we save the Usr model instance.
             usr.save()
+
+            groups = Group.objects.get(name="Oridinary")
+            if groups:
+                print("group find")
+                print(groups.id)
+                user.groups.add(groups.id)
+                user.save()
 
             # Update our variable to tell the template registration was successful.
             registered = True
@@ -134,3 +142,12 @@ def user_login(request):
 def user_logout(request):
     logout(request)
     return HttpResponseRedirect('/gospodarkaApp/')
+
+def objects(request):
+    context = RequestContext(request)
+
+    objects = Object.objects.order_by('address__city')
+    context_dict = {'objects': objects}
+
+    return render_to_response('objects.html', context_dict, context)
+
