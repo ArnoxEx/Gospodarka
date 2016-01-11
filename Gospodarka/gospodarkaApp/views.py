@@ -21,7 +21,6 @@ def index(request):
         print("Youre not logged in")
 
     context = RequestContext(request)
-
     # object_list = Object.objects.filter(address__city__exact = 'Wroclaw').order_by('address_id')
     # tmpl = loader.get_template("index.html")
     # cont = Context({'Object': object_list})
@@ -180,3 +179,11 @@ def add_object(request):
     return render_to_response('add_object.html'
             , {'object_form' : object_form, 'address_form' : address_form, 'created': created}
             , context)
+
+def eventsTable(request):
+    context = RequestContext(request)
+
+    events = Event.objects.order_by('name')
+    context_dict = {'events': events}
+
+    return render_to_response("events.html", context_dict, context)

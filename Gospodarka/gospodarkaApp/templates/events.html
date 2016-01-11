@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Wydarzenia</title>
+    </head>
+
+    <body>
+        <table border="1" style="width:100%">
+            <tr>
+                <th>No</th>
+                <th>Nazwa</th>
+                <th>Miejsce</th>
+                <th>ilość dostępnych biletów</th>
+                <th>czas</th>
+          </tr>
+          {% for event in events %}
+            <tr>
+                <td>{{event.id}}</td>
+                <td>{{event.name}}</td>
+                <td>{{event.place.name}}</td>
+                <td>{{event.max_tickets}}</td>
+                <td>{{event.time}}</td>
+            </tr>
+          {% endfor %}
+        </table>
+    </body>
+</html>
