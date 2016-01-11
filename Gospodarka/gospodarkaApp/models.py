@@ -55,15 +55,6 @@ class Ordr(models.Model):
         db_table = 'ordr'
 
 
-class Privilige(models.Model):
-    id = models.AutoField(primary_key=True)
-    value = models.CharField(max_length=5)
-
-    class Meta:
-        managed = False
-        db_table = 'privilige'
-
-
 class Status(models.Model):
     id = models.AutoField(primary_key=True)
     value = models.CharField(max_length=64)

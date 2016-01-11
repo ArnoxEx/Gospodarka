@@ -7,21 +7,24 @@ from django.template import Context, loader, RequestContext
 from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render_to_response
 from django.views.decorators.csrf import ensure_csrf_cookie
-from django.contrib.auth import authenticate, login
+from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth.decorators import login_required
 @ensure_csrf_cookie
 
 
 def index(request):
-    object_list = Object.objects.filter(address__city__exact = 'Wroclaw').order_by('address_id')
-    tmpl = loader.get_template("index.html")
-    cont = Context({'Object': object_list})
-    return HttpResponse(tmpl.render(cont))
+    if (request.user.is_authenticated()):
+        print("Youre logged in")
+        print(request.user.username)
+    else:
+        print("Youre not logged in")
 
-def afterLogin(request):
-    if request.method == 'POST':
-        c = {}
-        c.update(csrf(request))
-        return render_to_response("afterLogin.html", c)
+    context = RequestContext(request)
+
+    # object_list = Object.objects.filter(address__city__exact = 'Wroclaw').order_by('address_id')
+    # tmpl = loader.get_template("index.html")
+    # cont = Context({'Object': object_list})
+    return render_to_response("index.html", {}, context)
 
 def register(request):
     context = RequestContext(request)
@@ -86,9 +89,14 @@ def register(request):
 def user_login(request):
     context = RequestContext(request)
 
+    if (request.user.is_authenticated()):
+        print("Youre logged in")
+        print(request.user.username)
+    else:
+        print("Youre not logged in")
     # If the request is a HTTP POST, try to pull out the relevant information.
     if request.method == 'POST':
-        # Gather the username and password provided by the user.
+        # Gather the usedrname and password provided by the user.
         # This information is obtained from the login form.
         username = request.POST['username']
         password = request.POST['password']
@@ -122,3 +130,7 @@ def user_login(request):
         # blank dictionary object...
         return render_to_response('login.html', {}, context)
 
+@login_required
+def user_logout(request):
+    logout(request)
+    return HttpResponseRedirect('/gospodarkaApp/')
