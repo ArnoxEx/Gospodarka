@@ -21,9 +21,7 @@ def index(request):
         print("Youre not logged in")
 
     context = RequestContext(request)
-    # object_list = Object.objects.filter(address__city__exact = 'Wroclaw').order_by('address_id')
-    # tmpl = loader.get_template("index.html")
-    # cont = Context({'Object': object_list})
+    is_manager = False
     return render_to_response("index.html", {}, context)
 
 def register(request):
