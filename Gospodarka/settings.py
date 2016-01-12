@@ -38,6 +38,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
 	'Gospodarka.gospodarkaApp',
     'jquery',
+    'django_static_jquery',
 ]
 
 MIDDLEWARE_CLASSES = [
