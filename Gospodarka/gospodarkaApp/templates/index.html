@@ -8,26 +8,33 @@
     <section class="Login/Register">
       {% if user.is_authenticated %}
         <div class="Logout">
-          <a href="logout">Log out</a><br />
+          <a href="/gospodarkaApp/logout">Log out</a>
         </div>
       {% else %}
         <div class="Login">
-          <a href="login">Log in here</a><br />
+          <a href="/gospodarkaApp/login">Log in here</a>
         </div>
         <div class="Register">
-          If not registered <a href="register">register here</a><br />
+          If not registered <a href="/gospodarkaApp/register">register here</a>
         </div>
       {% endif %}
       <br />
       <div class="Objects">
-        <a href="objects">Obiekty</a><br />
+        <a href="/gospodarkaApp/objects">Obiekty</a>
       </div>
+      {% if is_manager %}
       <div class="Objects">
-        <a href="user_objects">Twoje obiekty</a><br />
+        <a href="/gospodarkaApp/user_objects">Twoje obiekty</a>
       </div>
-        <div class="Events">
-        <a href="events">Wydarzenia</a><br />
+      {% endif %}
+      <div class="Events">
+        <a href="/gospodarkaApp/events">Wydarzenia</a>
       </div>
+      {% if user.is_authenticated %}
+      <div class="Orders">
+        <a href="/gospodarkaApp/orders">Zamówione bilety</a>
+      </div>
+      {% endif %}
     </section>
   </body>
 </html>

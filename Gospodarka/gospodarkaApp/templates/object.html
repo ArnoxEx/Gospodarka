@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Dobre Wydarzenie</title>
+    </head>
+
+    <body>
+        <h1>Obiekt</h1>
+
+        {% if object %}
+            Obiekt:<br />
+            {{object.name}}<br />
+            Adres:<br />
+            ulica: {{object.address.street}}<br />
+            numer: {{object.address.numb}}<br />
+            kod pocztowy: {{object.address.postal_code}}<br />
+            miasto:{{object.address.city}}
+        {% else %}
+            <strong>Wystąpił błąd przy wyświetlaniu obiektu.
+                W razie pytań proszę zgłosić się do administracji</strong>
+        {% endif %}
+        <div class="Object">
+          <a href="/gospodarkaApp/objects">Powrot do obiektow</a><br />
+        </div>
+    </body>
+</html>

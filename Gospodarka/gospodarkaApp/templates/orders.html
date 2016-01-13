@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Wydarzenia</title>
+    </head>
+
+    <body>
+        {% if orders %}
+        <table border="1" style="width:100%">
+            <tr>
+                <th>Wydarzenie</th>
+                <th>status</th>
+            </tr>
+            {% for order in orders %}
+            <tr>
+                <td>{{order.event.name}}</td>
+                <td>{{order.status}}</td>
+            </tr>
+          {% endfor %}
+        </table>
+        {% else %}
+            <strong>Nie znaleziono zamówień.<br />
+                W razie pytań prosimy o kontakt z administracją</strong>
+        {% endif %}
+    </body>
+</html>

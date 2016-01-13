@@ -1,6 +1,7 @@
 from django.shortcuts import render
 
 # Create your views here.
+from operator import attrgetter
 from Gospodarka.gospodarkaApp.models import Object, Address
 from Gospodarka.gospodarkaApp.forms import *
 from django.template import Context, loader, RequestContext
@@ -10,6 +11,7 @@ from django.views.decorators.csrf import ensure_csrf_cookie
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import Group
+from django.db.models import Q
 @ensure_csrf_cookie
 
 
@@ -21,8 +23,8 @@ def index(request):
         print("Youre not logged in")
 
     context = RequestContext(request)
-    is_manager = False
-    return render_to_response("index.html", {}, context)
+    is_manager = request.user.groups.filter(name='Manager').exists()
+    return render_to_response("index.html", { 'is_manager' : is_manager }, context)
 
 def register(request):
     context = RequestContext(request)
@@ -138,7 +140,7 @@ def user_logout(request):
     logout(request)
     return HttpResponseRedirect('/gospodarkaApp/')
 
-def objects(request):
+def objects(request, user=None):
     context = RequestContext(request)
 
     is_manager = False
@@ -148,7 +150,15 @@ def objects(request):
     else:
         print('is not manager')
 
-    objects = Object.objects.order_by('address__city')
+    if user==None:
+        objects = Object.objects
+    else:
+        usrobjects = Usrobject.objects.filter(usr=user)
+        query = Q()
+        for usrobject in usrobjects:
+            query = query | Q(id=usrobject.object.id)
+        objects = Object.objects.filter(query)
+    objects = objects.order_by('address__city')
     context_dict = {'objects': objects, 'is_manager': is_manager}
 
     return render_to_response('objects.html', context_dict, context)
@@ -184,10 +194,29 @@ def add_object(request):
             , {'object_form' : object_form, 'address_form' : address_form, 'created': created}
             , context)
 
+@login_required
+def user_objects(request):
+    return objects(request, Usr.objects.get(user=request.user))
+
+def object(request, object_id):
+    context = RequestContext(request)
+
+    object = Object.objects.get(id=object_id)
+    return render_to_response('object.html', {'object' : object}, context)
+
 def eventsTable(request):
     context = RequestContext(request)
 
     events = Event.objects.order_by('name')
     context_dict = {'events': events}
 
-    return render_to_response("events.html", context_dict, context)
+    return render_to_response('events.html', context_dict, context)
+
+@login_required
+def orders(request):
+    context = RequestContext(request)
+
+    orders = Ordr.objects.filter(usr__user=request.user)
+    context_dict = {'orders' : orders}
+
+    return render_to_response('orders.html', context_dict, context)

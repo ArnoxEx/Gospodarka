@@ -10,7 +10,7 @@
         {% if objects %}
             <ul>
                 {% for object in objects %}
-                <li>{{object.name}}</li>
+                <li><a href="/gospodarkaApp/object/{{object.id}}">{{object.name}}</a></li>
                 {% endfor %}
             </ul>
         {% else %}
@@ -18,8 +18,11 @@
         {% endif %}
         {% if is_manager %}
             <div class="AddObject">
-              <a href="add_object">Dodaj nowy obiekt</a><br />
+              <a href="/gospodarkaApp/add_object">Dodaj nowy obiekt</a><br />
             </div>
         {% endif %}
+        <div class="Index">
+          <a href="/gospodarkaApp">Powrot do indexu</a><br />
+        </div>
     </body>
 </html>
