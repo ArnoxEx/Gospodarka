@@ -64,7 +64,7 @@ def register(request):
 
             group = Group.objects.get(name="Oridinary")
             if group:
-                user.group.add(groups.id)
+                user.groups.add(group.id)
                 user.save()
 
             registered = True
@@ -134,7 +134,7 @@ def user_logout(request):
 @login_required
 def edit_profile(request):
     context = RequestContext(request)
-    
+
     changed = False
     usr     = Usr.objects.get(user=request.user)
 
@@ -242,7 +242,7 @@ def object(request, object_id):
 
 def edit_object(request, object_id):
     context = RequestContext(request)
-    
+
     changed = False
     object = Object.objects.get(id=object_id)
 
@@ -296,7 +296,7 @@ def event(request, event_id):
     ticket_number = event.max_tickets
     orders = Ordr.objects.filter(event=event)
     for order in orders:
-        ticket_number = ticket_number - order.numb 
+        ticket_number = ticket_number - order.numb
 
     return render_to_response('event.html',
         {'event' : event, 'ticket_number' : ticket_number, 'is_manager' : is_manager}, context)
@@ -327,7 +327,7 @@ def add_event(request, object_id):
 
 def edit_event(request, event_id):
     context = RequestContext(request)
-    
+
     changed = False
     event = Event.objects.get(id=event_id)
 
@@ -378,6 +378,16 @@ def orders(request):
 
     return render_to_response('orders.html', context_dict, context)
 
+def otherOrders(request):
+    user = Usr.objects.get(user=request.user)
+    context = RequestContext(request)
+    objectsIds = Usrobject.objects.filter(usr=user).values_list('object')
+    events=Event.objects.filter(place__in=objectsIds).values_list('id')
+    orders = Ordr.objects.filter(event__in=events)
+    context_dict = {'otherOrders' : orders}
+
+    return render_to_response('otherOrders.html', context_dict, context)
+
 @login_required
 def add_order(request, event_id):
     context = RequestContext(request)
@@ -390,7 +400,7 @@ def add_order(request, event_id):
 
         if order_form.is_valid():
             order = order_form.save(commit=False)
-            
+
             event = Event.objects.get(id=event_id)
             ticket_number = event.max_tickets
             orders = Ordr.objects.filter(event=event)
