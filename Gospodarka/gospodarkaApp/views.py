@@ -296,7 +296,7 @@ def event(request, event_id):
     ticket_number = event.max_tickets
     orders = Ordr.objects.filter(event=event)
     for order in orders:
-        ticket_number = ticket_number - order.numb
+        ticket_number = ticket_number - order.numb 
 
     return render_to_response('event.html',
         {'event' : event, 'ticket_number' : ticket_number, 'is_manager' : is_manager}, context)
@@ -383,26 +383,37 @@ def add_order(request, event_id):
     context = RequestContext(request)
 
     created = False
+    failed  = False
 
     if request.method == 'POST':
         order_form = OrderForm(data=request.POST)
 
         if order_form.is_valid():
             order = order_form.save(commit=False)
-            usr = Usr.objects.get(user=request.user)
-            order.usr = usr
+            
             event = Event.objects.get(id=event_id)
-            order.event = event
-            status = Status.objects.get(value='Created')
-            order.status = status
-            order.save()
+            ticket_number = event.max_tickets
+            orders = Ordr.objects.filter(event=event)
+            for order in orders:
+                ticket_number = ticket_number - order.numb
+            if order.numb > ticket_number:
+                failed = True
+            else:
+                usr = Usr.objects.get(user=request.user)
+                status = Status.objects.get(value='Created')
 
-            created = True
+                order.usr = usr
+                order.event = event
+                order.status = status
+                order.save()
+
+                created = True
 
         else:
-            print (order_form)
+            print (order_form.errors)
     else:
         order_form = OrderForm()
 
     return render_to_response('add_order.html',
-        {'order_form' : order_form, 'created': created, 'event_id' : event_id,} , context)
+        {'order_form' : order_form, 'created': created, 'event_id' : event_id, 'failed' : failed}
+        , context)

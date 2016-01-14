@@ -12,6 +12,11 @@
         <a href="/gospodarkaApp/events">Powrót do wydarzeń.</a><br />
         {% endif %}
         {% else %}
+        {% if failed %}
+        <strong>Nie udało się utwórzyć zamówienia,
+            to wydarzenie nie posiada tylu wolnych biletów</strong>
+        <a href="/gospodarkaApp/event/{{event_id}}">Powrót do wydarzenia.</a><br />
+        {% endif %}
 
         <form id="order_form" method="post" action="/gospodarkaApp/add_order/{{event_id}}/"
                 enctype="multipart/form-data">
