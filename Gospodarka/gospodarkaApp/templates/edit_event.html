@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Dobre Wydarzenie</title>
+    </head>
+
+    <body>
+        {% if changed %}
+            Dane został zedytowane z sukcesem
+            <a href="/gospodarkaApp/event/{{event_id}}">Powrót do wydarzenia.</a><br />
+        {% else %}
+
+        <form id="event_form" method="post" action="/gospodarkaApp/edit_event/{{event_id}}/"
+                enctype="multipart/form-data">
+
+            {% csrf_token %}
+            {{ event_form.as_p }}
+
+            <input type="submit" name="submit" value="Zmien wydarzenie" />
+        </form>
+        {% endif %}
+    </body>
+</html>

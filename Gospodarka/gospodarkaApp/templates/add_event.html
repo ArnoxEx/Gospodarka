@@ -9,18 +9,17 @@
         {% if object_id %}
         <a href="/gospodarkaApp/object/{{object_id}}">Powrót  do obiektu.</a><br />
         {% else %}
-        <a href="/gospodarkaApp/objects">Powrót  do obiektów.</a><br />
+        <a href="/gospodarkaApp/events">Wyświetl wydarzenia.</a><br />
         {% endif %}
         {% else %}
 
-        <form id="object_form" method="post" action="/gospodarkaApp/add_object"
+        <form id="event_form" method="post" action="/gospodarkaApp/add_event/{{object_id}}/"
                 enctype="multipart/form-data">
 
             {% csrf_token %}
-            {{ object_form.as_p }}
-            {{ address_form.as_p }}
+            {{ event_form.as_p }}
 
-            <input type="submit" name="submit" value="Dodaj obiekt" />
+            <input type="submit" name="submit" value="Dodaj wydarzenie" />
         </form>
         {% endif %}
     </body>

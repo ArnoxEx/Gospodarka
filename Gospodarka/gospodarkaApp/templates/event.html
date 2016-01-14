@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Dobre Wydarzenie</title>
+    </head>
+
+    <body>
+        {% if event %}
+            Wydarzenie {{event.name}}<br />
+            Gdzie:
+            {{event.place.name}}<br />
+            Adres:<br />
+            ulica: {{event.place.address.street}}<br />
+            numer: {{event.place.address.numb}}<br />
+            kod pocztowy: {{event.place.address.postal_code}}<br />
+            miasto:{{event.place.address.city}}<br />
+            Ilość wolnych biletów: {{ticket_number}}
+
+        {% if is_manager %}
+            <div class="Edition">
+              <a href="/gospodarkaApp/edit_event/{{event.id}}">Edytuj wydarzenie</a><br />
+            </div>
+            <div class="Event">
+              <a href="/gospodarkaApp/remove_event/{{event.id}}">Usuń wydarzenie</a><br />
+            </div>
+        {% endif %}
+
+        <div class="Order">
+          <a href="/gospodarkaApp/add_order/{{event.id}}/">Zamów bilet</a><br />
+        </div>
+
+        {% else %}
+            <strong>Wystąpił błąd przy wyświetlaniu wydarzenia.
+                W razie pytań proszę zgłosić się do administracji</strong>
+        {% endif %}
+        <div class="Event">
+          <a href="/gospodarkaApp/events">Powrot do wydarzeń</a><br />
+        </div>
+    </body>
+</html>

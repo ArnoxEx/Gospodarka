@@ -29,3 +29,15 @@ class ObjectForm(forms.ModelForm):
     class Meta:
         model = Object
         fields = ('name',)
+
+class EventForm(forms.ModelForm):
+    time = forms.DateField(widget=forms.SelectDateWidget())
+
+    class Meta:
+        model = Event
+        fields = ('name', 'max_tickets',)
+
+class OrderForm(forms.ModelForm):
+    class Meta:
+        model = Ordr
+        fields = ('numb',)

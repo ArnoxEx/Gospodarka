@@ -5,11 +5,8 @@
     </head>
 
     <body>
-        <h1>Obiekt</h1>
-
         {% if object %}
-            Obiekt:<br />
-            {{object.name}}<br />
+            Obiekt {{object.name}}<br />
             Adres:<br />
             ulica: {{object.address.street}}<br />
             numer: {{object.address.numb}}<br />
@@ -19,6 +16,9 @@
         {% if is_manager %}
             <div class="Edition">
               <a href="/gospodarkaApp/edit_object/{{object.id}}">Edytuj obiekt</a><br />
+            </div>
+            <div class="Event">
+              <a href="/gospodarkaApp/add_event/{{object.id}}">Stwórz wydarzenie</a><br />
             </div>
         {% endif %}
 

@@ -9,7 +9,7 @@ from __future__ import unicode_literals
 
 from django.db import models
 from django.contrib.auth.models import User
-
+from datetime import datetime
 
 class Address(models.Model):
     id = models.AutoField(primary_key=True)
@@ -30,8 +30,8 @@ class Event(models.Model):
     id = models.AutoField(primary_key=True)
     name = models.CharField(max_length=64)
     place = models.ForeignKey('Object', models.DO_NOTHING, db_column='place')
-    max_tickets = models.BigIntegerField()
-    time = models.DateField()
+    max_tickets = models.IntegerField()
+    time = models.DateField(default=datetime.now)
 
     class Meta:
         managed = False
@@ -53,6 +53,7 @@ class Ordr(models.Model):
     usr = models.ForeignKey('Usr', models.DO_NOTHING, db_column='usr')
     event = models.ForeignKey(Event, models.DO_NOTHING, db_column='event')
     status = models.ForeignKey('Status', models.DO_NOTHING, db_column='status')
+    numb = models.IntegerField(default=1)
 
     class Meta:
         managed = False

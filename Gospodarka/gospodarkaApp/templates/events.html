@@ -33,7 +33,7 @@
               {% for event in events %}
                 <tr>
                     <td>{{event.id}}</td>
-                    <td>{{event.name}}</td>
+                    <td><a href="/gospodarkaApp/event/{{event.id}}">{{event.name}}</a></td>
                     <td>{{event.place.name}}</td>
                     <td>{{event.max_tickets}}</td>
                     <td>{{event.time}}</td>

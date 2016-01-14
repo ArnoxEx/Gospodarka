@@ -15,6 +15,18 @@ from django.db.models import Q
 @ensure_csrf_cookie
 
 
+def isManagerByUserAndObject(user, object):
+    is_manager = False
+    if user.is_authenticated():
+        usr = Usr.objects.get(user=user)
+        usrobject = Usrobject.objects.filter(usr=usr, object=object)
+        if usrobject:
+            is_manager = True
+        else:
+            print("ERROR: object without management")
+    return is_manager
+
+
 def index(request):
     if (request.user.is_authenticated()):
         print("Youre logged in")
@@ -217,8 +229,8 @@ def object(request, object_id):
 
     object = Object.objects.get(id=object_id)
 
-    is_manager = request.user.is_authenticated()
-    if is_manager:
+    is_manager = False
+    if request.user.is_authenticated():
         usr = Usr.objects.get(user=request.user)
         usrobject = Usrobject.objects.filter(usr=usr, object=object)
         if usrobject:
@@ -267,6 +279,96 @@ def eventsTable(request):
 
     return render_to_response('events.html', context_dict, context)
 
+def event(request, event_id):
+    context = RequestContext(request)
+
+    event = Event.objects.get(id=event_id)
+
+    is_manager = False
+    if request.user.is_authenticated():
+        usr = Usr.objects.get(user=request.user)
+        usrobject = Usrobject.objects.filter(usr=usr, object=event.place)
+        if usrobject:
+            is_manager = True
+        else:
+            print("ERROR: object without management")
+
+    ticket_number = event.max_tickets
+    orders = Ordr.objects.filter(event=event)
+    for order in orders:
+        ticket_number = ticket_number - order.numb
+
+    return render_to_response('event.html',
+        {'event' : event, 'ticket_number' : ticket_number, 'is_manager' : is_manager}, context)
+
+def add_event(request, object_id):
+    context = RequestContext(request)
+
+    created = False
+
+    if request.method == 'POST':
+        event_form = EventForm(data=request.POST)
+
+        if event_form.is_valid():
+            event  = event_form.save(commit=False)
+            object = Object.objects.get(id=object_id)
+            event.place = object
+            event.save()
+
+            created = True
+
+        else:
+            print (event_form.errors)
+    else:
+        event_form = EventForm()
+
+    return render_to_response('add_event.html'
+            , {'event_form' : event_form, 'object_id' : object_id, 'created' : created} , context)
+
+def edit_event(request, event_id):
+    context = RequestContext(request)
+    
+    changed = False
+    event = Event.objects.get(id=event_id)
+
+    if request.method == 'POST':
+        event_form = EventForm(data=request.POST)
+
+        if event_form.is_valid():
+            new_event = event_form.save(commit = False)
+            new_event.id = event.id
+            new_event.place = event.place
+            new_event.save()
+
+            changed = True
+
+        else:
+            print (event_form.errors)
+    else:
+        event_form = EventForm(instance=event)
+
+    return render_to_response('edit_event.html'
+            , {'event_form' : event_form, 'event_id' : event_id, 'changed': changed,} , context)
+
+@login_required
+def remove_event(request, event_id):
+    context = RequestContext(request)
+
+    event = Event.objects.get(id=event_id)
+
+    is_manager = False
+    if request.user.is_authenticated():
+        usr = Usr.objects.get(user=request.user)
+        usrobject = Usrobject.objects.filter(usr=usr, object=event.place)
+        if usrobject:
+            is_manager = True
+            event = Event.objects.get(id=event_id).delete()
+        else:
+            print("ERROR: object without management")
+
+    return render_to_response('remove_event.html'
+            , {'is_manager' : is_manager,} , context)
+
 @login_required
 def orders(request):
     context = RequestContext(request)
@@ -275,3 +377,32 @@ def orders(request):
     context_dict = {'orders' : orders}
 
     return render_to_response('orders.html', context_dict, context)
+
+@login_required
+def add_order(request, event_id):
+    context = RequestContext(request)
+
+    created = False
+
+    if request.method == 'POST':
+        order_form = OrderForm(data=request.POST)
+
+        if order_form.is_valid():
+            order = order_form.save(commit=False)
+            usr = Usr.objects.get(user=request.user)
+            order.usr = usr
+            event = Event.objects.get(id=event_id)
+            order.event = event
+            status = Status.objects.get(value='Created')
+            order.status = status
+            order.save()
+
+            created = True
+
+        else:
+            print (order_form)
+    else:
+        order_form = OrderForm()
+
+    return render_to_response('add_order.html',
+        {'order_form' : order_form, 'created': created, 'event_id' : event_id,} , context)

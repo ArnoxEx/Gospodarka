@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Dobre Wydarzenie</title>
+    </head>
+
+    <body>
+        {% if is_manager %}
+            Udało się usunąć wydarzenie<br />
+            <a href="/gospodarkaApp/events">Powrót do wydarzeń</a>
+        {% else %}
+            <strong>Nie jesteś właścicielem wydarzenia - nie możesz go usunąć</strong>
+        {% endif %}
+    </body>
+</html>
