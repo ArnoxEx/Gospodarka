@@ -7,15 +7,18 @@
   <body>
     <section class="Login/Register">
       {% if user.is_authenticated %}
+        <div class="Edit">
+          <a href="/gospodarkaApp/edit_profile">Edytuj profil</a>
+        </div>
         <div class="Logout">
-          <a href="/gospodarkaApp/logout">Log out</a>
+          <a href="/gospodarkaApp/logout">Wyloguj</a>
         </div>
       {% else %}
         <div class="Login">
-          <a href="/gospodarkaApp/login">Log in here</a>
+          <a href="/gospodarkaApp/login">Zaloguj się</a>
         </div>
         <div class="Register">
-          If not registered <a href="/gospodarkaApp/register">register here</a>
+          Jeżeli nie jesteś zarejestrowany: <a href="/gospodarkaApp/register">zarejestruj się</a>
         </div>
       {% endif %}
       <br />

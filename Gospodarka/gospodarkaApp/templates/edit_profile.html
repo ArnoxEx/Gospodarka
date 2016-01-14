@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Dobre Wydarzenie</title>
+    </head>
+
+    <body>
+        {% if changed %}
+            Dane został zedytowane z sukcesem
+            <a href="/gospodarkaApp/">Powrót do strony głównej.</a><br />
+        {% else %}
+
+        <form id="usr_form" method="post" action="/gospodarkaApp/edit_profile/"
+                enctype="multipart/form-data">
+
+            {% csrf_token %}
+            {{ email_form.as_p }}
+            {{ usr_form.as_p }}
+            {{ address_form.as_p }}
+
+            <input type="submit" name="submit" value="Edytuj konto" />
+        </form>
+        {% endif %}
+    </body>
+</html>

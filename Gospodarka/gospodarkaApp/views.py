@@ -29,39 +29,25 @@ def index(request):
 def register(request):
     context = RequestContext(request)
 
-    # A boolean value for telling the template whether the registration was successful.
-    # Set to False initially. Code changes value to True when registration succeeds.
     registered = False
 
-    # If it's a HTTP POST, we're interested in processing form data.
     if request.method == 'POST':
-        # Attempt to grab information from the raw form information.
-        # Note that we make use of both UserForm and UserProfileForm.
         user_form    = UserForm(data=request.POST)
         usr_form     = UsrForm(data=request.POST)
         address_form = AddressForm(data=request.POST)
 
-        # If all forms are valid...
         if user_form.is_valid() and usr_form.is_valid() and address_form.is_valid():
-            # Save the user's form data to the database.
             user = user_form.save(commit=False)
 
-            # Now we hash the password with the set_password method.
-            # Once hashed, we can update the user object.
             user.set_password(user.password)
             user.save()
 
-            # Now we insert address data to database
             address = address_form.save()
 
-            # Now sort out the Usr instance.
-            # Since we need to set the user attribute ourselves, we set commit=False.
-            # This delays saving the model until we're ready to avoid integrity problems.
             usr = usr_form.save(commit=False)
             usr.user = user
             usr.address = address
 
-            # Now we save the Usr model instance.
             usr.save()
 
             group = Group.objects.get(name="Oridinary")
@@ -69,23 +55,16 @@ def register(request):
                 user.group.add(groups.id)
                 user.save()
 
-            # Update our variable to tell the template registration was successful.
             registered = True
 
-        # Invalid form or forms - mistakes or something else?
-        # Print problems to the terminal.
-        # They'll also be shown to the user.
         else:
             print (user_form.errors, usr_form.errors, address_form.errors)
 
-    # Not a HTTP POST, so we render our form using two ModelForm instances.
-    # These forms will be blank, ready for user input.
     else:
         user_form = UserForm()
         usr_form = UsrForm()
         address_form = AddressForm()
 
-    # Render the template depending on the context.
     return render_to_response(
             'register.html',
             {'user_form': user_form, 'usr_form': usr_form, 'address_form' : address_form, 'registered': registered}
@@ -140,15 +119,50 @@ def user_logout(request):
     logout(request)
     return HttpResponseRedirect('/gospodarkaApp/')
 
+@login_required
+def edit_profile(request):
+    context = RequestContext(request)
+    
+    changed = False
+    usr     = Usr.objects.get(user=request.user)
+
+    if request.method == 'POST':
+        email_form   = EmailForm(  data=request.POST)
+        usr_form     = UsrForm(    data=request.POST)
+        address_form = AddressForm(data=request.POST)
+
+        if email_form.is_valid() and usr_form.is_valid() and address_form.is_valid():
+            email = email_form.save(commit = False)
+            request.user.email = email.email
+            request.user.save()
+
+            adr = address_form.save(commit = False)
+            adr.id = usr.address.id
+            adr.save()
+
+            new_usr = usr_form.save(commit = False)
+            new_usr.address = adr
+            new_usr.user = request.user
+            new_usr.id = usr.id
+            new_usr.save()
+
+            changed = True
+
+        else:
+            print (email_form.errors, usr_form.errors, address_form.errors)
+    else:
+        email_form   = EmailForm(  instance = request.user)
+        usr_form     = UsrForm(    instance = usr)
+        address_form = AddressForm(instance = usr.address)
+
+    return render_to_response('edit_profile.html'
+            , {'email_form' : email_form, 'usr_form' : usr_form, 'address_form' : address_form,
+                'changed': changed,}, context)
+
 def objects(request, user=None):
     context = RequestContext(request)
 
-    is_manager = False
-    if request.user.groups.filter(name='Manager').exists():
-        print("is manager")
-        is_manager = True
-    else:
-        print('is not manager')
+    is_manager = request.user.groups.filter(name='Manager').exists()
 
     if user==None:
         objects = Object.objects
@@ -173,7 +187,7 @@ def add_object(request):
         address_form = AddressForm(data=request.POST)
         object_form = ObjectForm(data=request.POST)
 
-        if address_form.is_valid():
+        if address_form.is_valid() and object_form.is_valid():
             adr = address_form.save()
             obj = object_form.save(commit=False)
             obj.address = adr
@@ -185,7 +199,7 @@ def add_object(request):
             created = True
 
         else:
-            print (address_form.errors)
+            print (address_form.errors, object_form.errors)
     else:
         object_form  = ObjectForm()
         address_form = AddressForm()
@@ -202,7 +216,48 @@ def object(request, object_id):
     context = RequestContext(request)
 
     object = Object.objects.get(id=object_id)
-    return render_to_response('object.html', {'object' : object}, context)
+
+    is_manager = request.user.is_authenticated()
+    if is_manager:
+        usr = Usr.objects.get(user=request.user)
+        usrobject = Usrobject.objects.filter(usr=usr, object=object)
+        if usrobject:
+            is_manager = True
+        else:
+            print("ERROR: object without management")
+
+    return render_to_response('object.html', {'object' : object, 'is_manager' : is_manager}, context)
+
+def edit_object(request, object_id):
+    context = RequestContext(request)
+    
+    changed = False
+    object = Object.objects.get(id=object_id)
+
+    if request.method == 'POST':
+        address_form = AddressForm(data=request.POST)
+        object_form  = ObjectForm( data=request.POST)
+
+        if address_form.is_valid() and object_form.is_valid():
+            adr = address_form.save(commit = False)
+            adr.id = object.address.id
+            adr.save()
+            obj = object_form.save(commit = False)
+            obj.id = object_id
+            obj.address = adr
+            obj.save()
+
+            changed = True
+
+        else:
+            print (address_form.errors, object_form.errors)
+    else:
+        object_form  = ObjectForm( instance = object)
+        address_form = AddressForm(instance = object.address)
+
+    return render_to_response('edit_object.html'
+            , {'object_form' : object_form, 'address_form' : address_form, 'changed': changed,
+                'object_id' :object_id }, context)
 
 def eventsTable(request):
     context = RequestContext(request)

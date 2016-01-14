@@ -18,6 +18,9 @@ class Address(models.Model):
     numb = models.CharField(max_length=20)
     postal_code = models.CharField(max_length=20)
 
+    def full_address(self):
+        return 'ul. ' + street + numb + ', ' + city + postal_code
+
     class Meta:
         managed = False
         db_table = 'address'

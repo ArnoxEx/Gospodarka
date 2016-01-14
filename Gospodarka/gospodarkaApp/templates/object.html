@@ -15,6 +15,13 @@
             numer: {{object.address.numb}}<br />
             kod pocztowy: {{object.address.postal_code}}<br />
             miasto:{{object.address.city}}
+
+        {% if is_manager %}
+            <div class="Edition">
+              <a href="/gospodarkaApp/edit_object/{{object.id}}">Edytuj obiekt</a><br />
+            </div>
+        {% endif %}
+
         {% else %}
             <strong>Wystąpił błąd przy wyświetlaniu obiektu.
                 W razie pytań proszę zgłosić się do administracji</strong>

@@ -10,6 +10,11 @@ class UserForm(forms.ModelForm):
         model = User
         fields = ('username', 'email', 'password',)
 
+class EmailForm(forms.ModelForm):
+    class Meta:
+        model = User
+        fields = ('email',)
+
 class UsrForm(forms.ModelForm):
     class Meta:
         model = Usr
