@@ -271,6 +271,24 @@ def edit_object(request, object_id):
             , {'object_form' : object_form, 'address_form' : address_form, 'changed': changed,
                 'object_id' :object_id }, context)
 
+@login_required
+def remove_object(request, object_id):
+    context = RequestContext(request)
+
+    object = Object.objects.get(id=object_id)
+
+    is_manager = False
+    if request.user.is_authenticated():
+        usr = Usr.objects.get(user=request.user)
+        usrobject = Usrobject.objects.filter(usr=usr, object=object)
+        if usrobject:
+            is_manager = True
+            object.delete()
+        else:
+            print("ERROR: object without management")
+
+    return render_to_response('remove_object.html', {'is_manager' : is_manager,} , context)
+
 def eventsTable(request):
     context = RequestContext(request)
 
@@ -362,7 +380,7 @@ def remove_event(request, event_id):
         usrobject = Usrobject.objects.filter(usr=usr, object=event.place)
         if usrobject:
             is_manager = True
-            event = Event.objects.get(id=event_id).delete()
+            event.delete()
         else:
             print("ERROR: object without management")
 
@@ -383,31 +401,36 @@ def add_order(request, event_id):
     context = RequestContext(request)
 
     created = False
-    failed  = False
+    too_much = False
+    too_little = False
+
 
     if request.method == 'POST':
         order_form = OrderForm(data=request.POST)
 
         if order_form.is_valid():
             order = order_form.save(commit=False)
-            
-            event = Event.objects.get(id=event_id)
-            ticket_number = event.max_tickets
-            orders = Ordr.objects.filter(event=event)
-            for order in orders:
-                ticket_number = ticket_number - order.numb
-            if order.numb > ticket_number:
-                failed = True
+
+            if order.numb < 1:
+                too_little = True
             else:
-                usr = Usr.objects.get(user=request.user)
-                status = Status.objects.get(value='Created')
+                event = Event.objects.get(id=event_id)
+                ticket_number = event.max_tickets
+                orders = Ordr.objects.filter(event=event)
+                for ordr in orders:
+                    ticket_number = ticket_number - ordr.numb
+                if order.numb > ticket_number:
+                    too_much = True
+                else:
+                    usr = Usr.objects.get(user=request.user)
+                    status = Status.objects.get(value='Created')
 
-                order.usr = usr
-                order.event = event
-                order.status = status
-                order.save()
+                    order.usr = usr
+                    order.event = event
+                    order.status = status
+                    order.save()
 
-                created = True
+                    created = True
 
         else:
             print (order_form.errors)
@@ -415,5 +438,5 @@ def add_order(request, event_id):
         order_form = OrderForm()
 
     return render_to_response('add_order.html',
-        {'order_form' : order_form, 'created': created, 'event_id' : event_id, 'failed' : failed}
-        , context)
+        {'order_form' : order_form, 'created': created, 'event_id' : event_id,
+        'too_much' : too_much, 'too_little' : too_little}, context)

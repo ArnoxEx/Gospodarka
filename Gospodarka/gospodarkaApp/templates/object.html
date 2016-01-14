@@ -14,11 +14,14 @@
             miasto:{{object.address.city}}
 
         {% if is_manager %}
-            <div class="Edition">
+            <div class="Object">
               <a href="/gospodarkaApp/edit_object/{{object.id}}">Edytuj obiekt</a><br />
             </div>
             <div class="Event">
               <a href="/gospodarkaApp/add_event/{{object.id}}">Stwórz wydarzenie</a><br />
+            </div>
+            <div class="Object">
+              <a href="/gospodarkaApp/remove_object/{{object.id}}">Usuń obiekt</a><br />
             </div>
         {% endif %}
 

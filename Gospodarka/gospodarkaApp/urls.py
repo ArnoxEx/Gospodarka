@@ -11,6 +11,7 @@ url(r'^edit_profile',                       edit_profile,   name='edit_profile')
 url(r'^objects',                            objects,        name='objects'),
 url(r'^add_object',                         add_object,     name='add_object'),
 url(r'^edit_object/(?P<object_id>\w+)/$',   edit_object,    name='edit_object'),
+url(r'^remove_object/(?P<object_id>\w+)/$', remove_object,  name='remove_object'),
 url(r'^user_objects',                       user_objects,   name='user_objects'),
 url(r'^object/(?P<object_id>\w+)/$',        object,         name='object'),
 url(r'^events',                             eventsTable,    name='eventsTable'),
