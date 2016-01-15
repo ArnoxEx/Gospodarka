@@ -16,6 +16,17 @@
         <td>{{order.status.value}}</td>
         <td>{{order.numb}}</td>
         <td>{{order.price}}</td>
+        <td>
+            <ul class="contextmenu">
+                <li>
+                    <form id="otherOrderform" method="post" action="dupa" enctype="multipart/form-data" class="form">
+                            {% csrf_token %}
+                        <input type="submit" name="submit" value="Zatwierdz" />
+                    </form>
+                </li>
+                <li><button>Odrzuć</button></li>
+            </ul>
+        <td>
     </tr>
   {% endfor %}
     </tbody>

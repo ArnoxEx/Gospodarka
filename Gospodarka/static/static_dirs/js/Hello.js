@@ -65,4 +65,33 @@ $(document).ready(function(){
         "color": "#C0C0C0"
     });
 
+$(function () {
+    $('table').on('contextmenu', 'tr', function(e){
+        $(this).find('.contextmenu')
+            .addClass('visible')
+            .css({
+                top: e.pageY,
+                left: e.pageX
+            });
+        return false;
+    }).on('mouseleave', 'tr', function(){
+        $('.contextmenu.visible').removeClass('visible');
+    });
+});
+
+    var frm = $('#otherOrderform');
+    frm.submit(function () {
+        $.ajax({
+            type: frm.attr('method'),
+            url: frm.attr('action'),
+            data: frm.serialize(),
+            success: function (data) {
+                 alert('test')
+            },
+            error: function(data) {
+                 alert("Error");
+            }
+        });
+        return false;
+
 });
