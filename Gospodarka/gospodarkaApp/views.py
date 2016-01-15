@@ -52,8 +52,8 @@ def register(request):
             usr.user = user
             usr.address = address
 
-            # salt = hashlib.sha1(str(random.random()).encode('utf-8')).hexdigest()[:5]            
-            # activation_key = hashlib.sha1((salt+user.email).encode('utf-8')).hexdigest()            
+            # salt = hashlib.sha1(str(random.random()).encode('utf-8')).hexdigest()[:5]
+            # activation_key = hashlib.sha1((salt+user.email).encode('utf-8')).hexdigest()
             # key_expires = datetime.now() + timedelta(2)
             # usr.activation_key = activation_key
             # usr.key_expires = key_expires
