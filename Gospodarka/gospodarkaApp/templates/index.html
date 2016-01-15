@@ -1,50 +1,8 @@
-<!DOCTYPE html>
-<html>
-  <head>
-      <title>Dobre Wydarzenie</title>
-<link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
-<link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap-theme.min.css">
-  </head>
-
-{% load staticfiles %}
-<link rel="stylesheet" href={% static "css\background.css" %}>
-<link rel="stylesheet" href={% static "css\button.css" %}>
-
-  <body>
-    <section class="Login/Register">
-      {% if user.is_authenticated %}
-        <div class="Edit">
-          <a href="/gospodarkaApp/edit_profile" class="button">Edytuj profil</a>
-        </div>
-        <div class="Logout">
-          <a href="/gospodarkaApp/logout" class="button">Wyloguj</a>
-        </div>
-      {% else %}
-        <div class="Login">
-          <a href="/gospodarkaApp/login" class="button">Zaloguj się</a>
-        </div>
-        <div class="Register">
-          Jeżeli nie jesteś zarejestrowany:<br />
-          <a href="/gospodarkaApp/register" class="button">zarejestruj się</a>
-        </div>
-      {% endif %}
-      <br />
-      <div class="Objects">
-        <a href="/gospodarkaApp/objects" class="button">Obiekty</a>
-      </div>
-      {% if is_manager %}
-      <div class="Objects">
-        <a href="/gospodarkaApp/user_objects" class="button">Twoje obiekty</a>
-      </div>
-      {% endif %}
-      <div class="Events">
-        <a href="/gospodarkaApp/events" class="button">Wydarzenia</a>
-      </div>
-      {% if user.is_authenticated %}
-      <div class="Orders">
-        <a href="/gospodarkaApp/orders" class="button">Zamówione bilety</a>
-      </div>
-      {% endif %}
-    </section>
-  </body>
-</html>
+{% extends "layout.html" %}
+{% block content %}
+<strong class="text">Witaj na stronie DobreWydarzenie.pl!</strong>
+<div class="text">
+  Jesteśmy portalem poświęconym wydarzeniom w każdym mieście w całej Polsce!
+  Tutaj możesz przejżeć Twoje ulubione miejsca, sprawdzić co i kiedy się dzieje i kupić bilet!
+</div>
+{% endblock content %}

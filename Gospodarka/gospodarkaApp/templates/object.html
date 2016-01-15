@@ -1,41 +1,28 @@
-<!DOCTYPE html>
-<html>
-    <head>
-        <title>Dobre Wydarzenie</title>
-<link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
-<link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap-theme.min.css">
-    </head>
+{% extends "layout.html" %}
+{% block content %}
+{% if object %}
+<div class="text">
+    Obiekt {{object.name}}<br />
+    Adres:<br />
+    ulica: {{object.address.street}}<br />
+    numer: {{object.address.numb}}<br />
+    kod pocztowy: {{object.address.postal_code}}<br />
+    miasto:{{object.address.city}}
+</div>
+{% if is_manager %}
+<div class="button">
+  <a href="/gospodarkaApp/edit_object/{{object.id}}">Edytuj obiekt</a><br />
+</div>
+<div class="button">
+  <a href="/gospodarkaApp/add_event/{{object.id}}">Stwórz wydarzenie</a><br />
+</div>
+<div class="button">
+  <a href="/gospodarkaApp/remove_object/{{object.id}}">Usuń obiekt</a><br />
+</div>
+{% endif %}
 
-{% load staticfiles %}
-<link rel="stylesheet" href={% static "css\background.css" %}>
-
-    <body>
-        {% if object %}
-            Obiekt {{object.name}}<br />
-            Adres:<br />
-            ulica: {{object.address.street}}<br />
-            numer: {{object.address.numb}}<br />
-            kod pocztowy: {{object.address.postal_code}}<br />
-            miasto:{{object.address.city}}
-
-        {% if is_manager %}
-            <div class="Object">
-              <a href="/gospodarkaApp/edit_object/{{object.id}}">Edytuj obiekt</a><br />
-            </div>
-            <div class="Event">
-              <a href="/gospodarkaApp/add_event/{{object.id}}">Stwórz wydarzenie</a><br />
-            </div>
-            <div class="Object">
-              <a href="/gospodarkaApp/remove_object/{{object.id}}">Usuń obiekt</a><br />
-            </div>
-        {% endif %}
-
-        {% else %}
-            <strong>Wystąpił błąd przy wyświetlaniu obiektu.
+{% else %}
+<strong class="text">Wystąpił błąd przy wyświetlaniu obiektu.
                 W razie pytań proszę zgłosić się do administracji</strong>
-        {% endif %}
-        <div class="Object">
-          <a href="/gospodarkaApp/objects">Powrot do obiektow</a><br />
-        </div>
-    </body>
-</html>
+{% endif %}
+{% endblock content %}

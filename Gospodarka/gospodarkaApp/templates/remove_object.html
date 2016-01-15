@@ -1,20 +1,10 @@
-<!DOCTYPE html>
-<html>
-    <head>
-        <title>Dobre Wydarzenie</title>
-<link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
-<link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap-theme.min.css">
-    </head>
-
-{% load staticfiles %}
-<link rel="stylesheet" href={% static "css\background.css" %}>
-
-    <body>
-        {% if is_manager %}
-            Udało się usunąć obiekt<br />
-            <a href="/gospodarkaApp/user_objects">Powrót do obiektów użytkownika</a>
-        {% else %}
-            <strong>Nie jesteś właścicielem obiektu - nie możesz go usunąć</strong>
-        {% endif %}
-    </body>
-</html>
+{% extends "layout.html" %}
+{% block content %}
+{% if is_manager %}
+<div class="text">
+    Udało się usunąć obiekt<br />
+{% else %}
+    <strong>Nie jesteś właścicielem obiektu - nie możesz go usunąć</strong>
+{% endif %}
+</div>
+{% endblock content %}

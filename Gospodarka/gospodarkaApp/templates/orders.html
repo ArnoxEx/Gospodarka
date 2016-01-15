@@ -1,31 +1,20 @@
-<!DOCTYPE html>
-<html>
-    <head>
-        <title>Wydarzenia</title>
-<link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
-<link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap-theme.min.css">
-    </head>
-
-{% load staticfiles %}
-<link rel="stylesheet" href={% static "css\background.css" %}>
-
-    <body>
-        {% if orders %}
-        <table border="1" style="width:100%">
-            <tr>
-                <th>Wydarzenie</th>
-                <th>status</th>
-            </tr>
-            {% for order in orders %}
-            <tr>
-                <td>{{order.event.name}}</td>
-                <td>{{order.status}}</td>
-            </tr>
-          {% endfor %}
-        </table>
-        {% else %}
-            <strong>Nie znaleziono zamówień.<br />
-                W razie pytań prosimy o kontakt z administracją</strong>
-        {% endif %}
-    </body>
-</html>
+{% extends "layout.html" %}
+{% block content %}
+<input id="searchInput" value="Type To Filter">
+<table id="keywords" border="1" style="width:100%">
+    <thead>
+        <tr>
+            <th class="sortable">Wydarzenie</th>
+            <th class="sortable">Status</th>
+        </tr>
+    </thead>
+    <tbody id="fbody">
+      {% for order in orders %}
+        <tr>
+            <td>{{order.event.name}}</td>
+            <td>{{order.status.value}}</td>
+        </tr>
+      {% endfor %}
+    </tbody>
+</table>
+{% endblock content %}

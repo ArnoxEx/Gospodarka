@@ -1,45 +1,34 @@
-<!DOCTYPE html>
-<html>
-    <head>
-        <title>Dobre Wydarzenie</title>
-<link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
-<link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap-theme.min.css">
-    </head>
+{% extends "layout.html" %}
+{% block content %}
+{% if event %}
+<div class="text">
+    Wydarzenie {{event.name}}<br />
+    Gdzie:
+    {{event.place.name}}<br />
+    Adres:<br />
+    ulica: {{event.place.address.street}}<br />
+    numer: {{event.place.address.numb}}<br />
+    kod pocztowy: {{event.place.address.postal_code}}<br />
+    miasto:{{event.place.address.city}}<br />
+    Ilość wolnych biletów: {{ticket_number}}
+</div>
+{% if is_manager %}
+<div class="button">
+  <a href="/gospodarkaApp/edit_event/{{event.id}}">Edytuj wydarzenie</a><br />
+</div>
+<div class="button">
+  <a href="/gospodarkaApp/remove_event/{{event.id}}">Usuń wydarzenie</a><br />
+</div>
+{% endif %}
 
-{% load staticfiles %}
-<link rel="stylesheet" href={% static "css\background.css" %}>
+{% if user.is_authenticated %}
+<div class="button">
+  <a href="/gospodarkaApp/add_order/{{event.id}}/">Zamów bilet</a><br />
+</div>
+{% endif %}
 
-    <body>
-        {% if event %}
-            Wydarzenie {{event.name}}<br />
-            Gdzie:
-            {{event.place.name}}<br />
-            Adres:<br />
-            ulica: {{event.place.address.street}}<br />
-            numer: {{event.place.address.numb}}<br />
-            kod pocztowy: {{event.place.address.postal_code}}<br />
-            miasto:{{event.place.address.city}}<br />
-            Ilość wolnych biletów: {{ticket_number}}
-
-        {% if is_manager %}
-            <div class="Edition">
-              <a href="/gospodarkaApp/edit_event/{{event.id}}">Edytuj wydarzenie</a><br />
-            </div>
-            <div class="Event">
-              <a href="/gospodarkaApp/remove_event/{{event.id}}">Usuń wydarzenie</a><br />
-            </div>
-        {% endif %}
-
-        <div class="Order">
-          <a href="/gospodarkaApp/add_order/{{event.id}}/">Zamów bilet</a><br />
-        </div>
-
-        {% else %}
-            <strong>Wystąpił błąd przy wyświetlaniu wydarzenia.
-                W razie pytań proszę zgłosić się do administracji</strong>
-        {% endif %}
-        <div class="Event">
-          <a href="/gospodarkaApp/events">Powrot do wydarzeń</a><br />
-        </div>
-    </body>
-</html>
+{% else %}
+<strong class="text">Wystąpił błąd przy wyświetlaniu wydarzenia.
+    W razie pytań proszę zgłosić się do administracji</strong>
+{% endif %}
+{% endblock content %}

@@ -2,6 +2,10 @@ from django.shortcuts import render
 
 # Create your views here.
 from operator import attrgetter
+from datetime import timedelta
+from datetime import datetime
+import hashlib, random
+from django.core.mail import send_mail
 from Gospodarka.gospodarkaApp.models import Object, Address
 from Gospodarka.gospodarkaApp.forms import *
 from django.template import Context, loader, RequestContext
@@ -13,19 +17,6 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import Group
 from django.db.models import Q
 @ensure_csrf_cookie
-
-
-def isManagerByUserAndObject(user, object):
-    is_manager = False
-    if user.is_authenticated():
-        usr = Usr.objects.get(user=user)
-        usrobject = Usrobject.objects.filter(usr=usr, object=object)
-        if usrobject:
-            is_manager = True
-        else:
-            print("ERROR: object without management")
-    return is_manager
-
 
 def index(request):
     if (request.user.is_authenticated()):
@@ -52,6 +43,7 @@ def register(request):
             user = user_form.save(commit=False)
 
             user.set_password(user.password)
+            user.is_active = False
             user.save()
 
             address = address_form.save()
@@ -60,12 +52,25 @@ def register(request):
             usr.user = user
             usr.address = address
 
+            salt = hashlib.sha1(str(random.random()).encode('utf-8')).hexdigest()[:5]            
+            activation_key = hashlib.sha1((salt+user.email).encode('utf-8')).hexdigest()            
+            key_expires = datetime.now() + timedelta(2)
+            usr.activation_key = activation_key
+            usr.key_expires = key_expires
+
             usr.save()
 
-            group = Group.objects.get(name="Oridinary")
+            group = Group.objects.filter(name="Oridinary")
             if group:
-                user.group.add(groups.id)
+                user.groups.add(group[0].id)
                 user.save()
+
+            email_subject = 'Account confirmation'
+            email_body = "Hey %s, thanks for signing up. To activate your account, click this link within \
+            48hours http://127.0.0.1:8000/gospodarkaApp/confirm/%s" % (user.username, activation_key)
+
+            send_mail(email_subject, email_body, 'dobreWydarzenie@gospodarkaApp.com',
+                [user.email], fail_silently=False)
 
             registered = True
 
@@ -166,10 +171,12 @@ def edit_profile(request):
         email_form   = EmailForm(  instance = request.user)
         usr_form     = UsrForm(    instance = usr)
         address_form = AddressForm(instance = usr.address)
+   
+    is_manager = request.user.groups.filter(name='Manager').exists()
 
     return render_to_response('edit_profile.html'
             , {'email_form' : email_form, 'usr_form' : usr_form, 'address_form' : address_form,
-                'changed': changed,}, context)
+                'changed': changed, 'is_manager' : is_manager}, context)
 
 def objects(request, user=None):
     context = RequestContext(request)
@@ -216,8 +223,9 @@ def add_object(request):
         object_form  = ObjectForm()
         address_form = AddressForm()
 
+    is_manager = request.user.groups.filter(name='Manager').exists()
     return render_to_response('add_object.html'
-            , {'object_form' : object_form, 'address_form' : address_form, 'created': created}
+            , {'object_form' : object_form, 'address_form' : address_form, 'created': created, 'is_manager' : is_manager}
             , context)
 
 @login_required
@@ -267,9 +275,10 @@ def edit_object(request, object_id):
         object_form  = ObjectForm( instance = object)
         address_form = AddressForm(instance = object.address)
 
+    is_manager = request.user.groups.filter(name='Manager').exists()
     return render_to_response('edit_object.html'
             , {'object_form' : object_form, 'address_form' : address_form, 'changed': changed,
-                'object_id' :object_id }, context)
+                'object_id' :object_id, 'is_manager' : is_manager}, context)
 
 @login_required
 def remove_object(request, object_id):
@@ -292,8 +301,9 @@ def remove_object(request, object_id):
 def eventsTable(request):
     context = RequestContext(request)
 
+    is_manager = request.user.groups.filter(name='Manager').exists()
     events = Event.objects.order_by('name')
-    context_dict = {'events': events}
+    context_dict = {'events': events, 'is_manager' : is_manager}
 
     return render_to_response('events.html', context_dict, context)
 
@@ -340,8 +350,9 @@ def add_event(request, object_id):
     else:
         event_form = EventForm()
 
+    is_manager = request.user.groups.filter(name='Manager').exists()
     return render_to_response('add_event.html'
-            , {'event_form' : event_form, 'object_id' : object_id, 'created' : created} , context)
+            , {'event_form' : event_form, 'object_id' : object_id, 'created' : created, 'is_manager' : is_manager} , context)
 
 def edit_event(request, event_id):
     context = RequestContext(request)
@@ -365,8 +376,9 @@ def edit_event(request, event_id):
     else:
         event_form = EventForm(instance=event)
 
+    is_manager = request.user.groups.filter(name='Manager').exists()
     return render_to_response('edit_event.html'
-            , {'event_form' : event_form, 'event_id' : event_id, 'changed': changed,} , context)
+            , {'event_form' : event_form, 'event_id' : event_id, 'changed': changed, 'is_manager' : is_manager} , context)
 
 @login_required
 def remove_event(request, event_id):
@@ -391,8 +403,9 @@ def remove_event(request, event_id):
 def orders(request):
     context = RequestContext(request)
 
+    is_manager = request.user.groups.filter(name='Manager').exists()
     orders = Ordr.objects.filter(usr__user=request.user)
-    context_dict = {'orders' : orders}
+    context_dict = {'orders' : orders, 'is_manager' : is_manager}
 
     return render_to_response('orders.html', context_dict, context)
 
@@ -437,6 +450,7 @@ def add_order(request, event_id):
     else:
         order_form = OrderForm()
 
+    is_manager = request.user.groups.filter(name='Manager').exists()
     return render_to_response('add_order.html',
         {'order_form' : order_form, 'created': created, 'event_id' : event_id,
-        'too_much' : too_much, 'too_little' : too_little}, context)
+        'too_much' : too_much, 'too_little' : too_little, 'is_manager' : is_manager}, context)

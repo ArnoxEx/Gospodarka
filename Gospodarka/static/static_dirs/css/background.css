@@ -2,3 +2,39 @@ body {
     background-image: url("8384be9e0a5d4b2ab63d3894dc3d9deb.jpg");
     background-size: cover;
 }
+
+.cols {
+    column-count: 2;
+    column-gap: 20px;
+    column-rule: 1px solid #e6e6e6;
+}
+
+.columnLeft {
+    float: left;
+    position: relative;
+    width: 20%;
+  
+    for demo purposes only 
+    background: #f2f2f2;
+    border: 1px solid #e6e6e6;
+    box-sizing: border-box; 
+}
+
+.columnRight {
+    float: right;
+    position: relative;
+    width: 80%;
+  
+    /*for demo purposes only 
+    background: #f2f2f2;
+    border: 1px solid #e6e6e6;
+    box-sizing: border-box; */
+}
+
+.text {
+    color: green
+}
+
+.form {
+    color: blue
+}

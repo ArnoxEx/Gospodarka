@@ -1,39 +1,29 @@
-<!DOCTYPE html>
-<html>
-    <head>
-        <title>Dobre Wydarzenie</title>
-<link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
-<link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap-theme.min.css">
-    </head>
+{% extends "layout.html" %}
+{% block content %}
+{% if created %}
+<div class="text">
+    Gratulacje, udało się stworzyć zamówienie!<br/>
+{% if event_id %}
+    <a href="/gospodarkaApp/event/{{event_id}}" class="button">Powrót do wydarzenia.</a><br />
+{% endif %}
+</div>
+{% else %}
+{% if too_much %}
+<strong>Nie udało się utwórzyć zamówienia, 
+    to wydarzenie nie posiada tylu wolnych biletów</strong>
+{% endif %}
+{% if too_little %}
+<strong>Nie udało się utwórzyć zamówienia, 
+    zamówiono mniej niż jeden bilet</strong>
+{% endif %}
 
-{% load staticfiles %}
-<link rel="stylesheet" href={% static "css\background.css" %}>
+<form id="order_form" method="post" action="/gospodarkaApp/add_order/{{event_id}}/"
+        enctype="multipart/form-data" class="form">
 
-    <body>
-        {% if created %}
-        {% if event_id %}
-        <a href="/gospodarkaApp/event/{{event_id}}">Powrót do wydarzenia.</a><br />
-        {% else %}
-        <a href="/gospodarkaApp/events">Powrót do wydarzeń.</a><br />
-        {% endif %}
-        {% else %}
-        {% if too_much %}
-        <strong>Nie udało się utwórzyć zamówienia, 
-            to wydarzenie nie posiada tylu wolnych biletów</strong>
-        {% endif %}
-        {% if too_little %}
-        <strong>Nie udało się utwórzyć zamówienia, 
-            zamówiono mniej niż jeden bilet</strong>
-        {% endif %}
+    {% csrf_token %}
+    {{ order_form.as_p }}
 
-        <form id="order_form" method="post" action="/gospodarkaApp/add_order/{{event_id}}/"
-                enctype="multipart/form-data">
-
-            {% csrf_token %}
-            {{ order_form.as_p }}
-
-            <input type="submit" name="submit" value="Zamów bilet" />
-        </form>
-        {% endif %}
-    </body>
-</html>
+    <input type="submit" name="submit" value="Zamów bilet" />
+</form>
+{% endif %}
+{% endblock content %}

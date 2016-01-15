@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Dobre Wydarzenie</title>
+<link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
+<link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap-theme.min.css">
+  </head>
+
+{% load staticfiles %}
+<link rel="stylesheet" href={% static "css\background.css" %}>
+<link rel="stylesheet" href={% static "css\button.css" %}>
+<link rel="stylesheet" href={% static "css\tableStyle.css" %}>
+<script src={% static "js\jquery-2.2.0.js" %} type="text/javascript"></script>
+<script src={% static "js/sortElements.js" %} type="text/javascript"></script>
+<script src={% static "js/Hello.js" %} type="text/javascript"></script>
+
+  <body>
+    <div align="center">
+      <br/><a href="/gospodarkaApp" class="button"><strong>DobreWydarzenie.pl</strong></a><br/><br/>
+    </div>
+    <section class="container">
+      <div class="columnLeft" align="left">
+        {% if user.is_authenticated %}
+          <div class="Edit">
+            <a href="/gospodarkaApp/edit_profile" class="button">Edytuj profil</a>
+          </div>
+          <div class="Logout">
+            <a href="/gospodarkaApp/logout" class="button">Wyloguj</a>
+          </div>
+        {% else %}
+          <div class="Login">
+            <a href="/gospodarkaApp/login" class="button">Zaloguj się</a>
+          </div>
+          <div class="Register">
+            <a href="/gospodarkaApp/register" class="button">zarejestruj się</a>
+          </div>
+        {% endif %}
+        <br />
+        <div class="Objects">
+          <a href="/gospodarkaApp/objects" class="button">Obiekty</a>
+        </div>
+        {% if is_manager %}
+        <div class="Objects">
+          <a href="/gospodarkaApp/user_objects" class="button">Twoje obiekty</a>
+        </div>
+        {% endif %}
+        <div class="Events">
+          <a href="/gospodarkaApp/events" class="button">Wydarzenia</a>
+        </div>
+        {% if user.is_authenticated %}
+        <div class="Orders">
+          <a href="/gospodarkaApp/orders" class="button">Zamówione bilety</a>
+        </div>
+        {% endif %}
+      </div>
+      <div class="columnRight" align="center">
+        {% block content %}{% endblock %}
+      </div>
+    </section>
+
+  </body>
+</html>

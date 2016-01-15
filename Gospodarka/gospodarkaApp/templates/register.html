@@ -1,38 +1,17 @@
-<!DOCTYPE html>
-<html>
-    <head>
-        <title>Dobre Wydarzenie</title>
-<link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
-<link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap-theme.min.css">
-    </head>
+{% extends "layout.html" %}
+{% block content %}
+{% if registered %}
+Rango says: <strong>Rejestracja przebiegła pomyślnie! Proszę wejść w link przesłany w mailu aby zakonczyć rejestracje</strong>
+{% else %}
+<form id="user_form" method="post" action="register"
+        enctype="multipart/form-data" class="form">
 
-{% load staticfiles %}
-<link rel="stylesheet" href={% static "css\background.css" %}>
+    {% csrf_token %}
+    {{ user_form.as_p }}
+    {{ usr_form.as_p }}
+    {{ address_form.as_p }}
 
-    <body>
-        <h1>Register with Rango</h1>
-
-        {% if registered %}
-        Rango says: <strong>thank you for registering!</strong>
-        <a href="/gospodarkaApp">Return to the homepage.</a><br />
-        {% else %}
-        Rango says: <strong>register here!</strong><br />
-
-        <form id="user_form" method="post" action="register"
-                enctype="multipart/form-data">
-
-            {% csrf_token %}
-
-            <!-- Display each form. The as_p method wraps each element in a paragraph
-                 (<p>) element. This ensures each element appears on a new line,
-                 making everything look neater. -->
-            {{ user_form.as_p }}
-            {{ usr_form.as_p }}
-            {{ address_form.as_p }}
-
-            <!-- Provide a button to click to submit the form. -->
-            <input type="submit" name="submit" value="Register" />
-        </form>
-        {% endif %}
-    </body>
-</html>
+    <input type="submit" name="submit" value="Register" />
+</form>
+{% endif %}
+{% endblock content %}

@@ -1,26 +1,12 @@
-<!DOCTYPE html>
-<html>
-    <head>
-        <title>Dobre Wydarzenie</title>
-<link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
-<link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap-theme.min.css">
-    </head>
+{% extends "layout.html" %}
+{% block content %}
+<form id="login_form" method="post" action="login" class="form" align="center">
+    {% csrf_token %}
+    Nazwa użytkownika: <input type="text" name="username" value="" size="50" />
+    <br />
+    Hasło: <input type="password" name="password" value="" size="50" />
+    <br />
 
-{% load staticfiles %}
-<link rel="stylesheet" href={% static "css\background.css" %}>
-
-    <body>
-        <h1>Login to Rango</h1>
-
-        <form id="login_form" method="post" action="login">
-            {% csrf_token %}
-            Username: <input type="text" name="username" value="" size="50" />
-            <br />
-            Password: <input type="password" name="password" value="" size="50" />
-            <br />
-
-            <input type="submit" value="submit" />
-        </form>
-
-    </body>
-</html>
+    <input type="submit" value="submit" />
+</form>
+{% endblock content %}

@@ -1,32 +1,22 @@
-<!DOCTYPE html>
-<html>
-    <head>
-        <title>Dobre Wydarzenie</title>
-<link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
-<link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap-theme.min.css">
-    </head>
+{% extends "layout.html" %}
+{% block content %}
+{% if created %}
+<div class="text">
+    Gratulacje, udało się stworzyć wydarzenie!<br/>
+{% if object_id %}
+    <a href="/gospodarkaApp/object/{{object_id}}" class="button">Powrót  do obiektu.</a><br />
+{% endif %}
+</div>
+{% else %}
 
-{% load staticfiles %}
-<link rel="stylesheet" href={% static "css\background.css" %}>
+<form id="object_form" method="post" action="/gospodarkaApp/add_object"
+        enctype="multipart/form-data" class="form">
 
-    <body>
-        {% if created %}
-        {% if object_id %}
-        <a href="/gospodarkaApp/object/{{object_id}}">Powrót  do obiektu.</a><br />
-        {% else %}
-        <a href="/gospodarkaApp/objects">Powrót  do obiektów.</a><br />
-        {% endif %}
-        {% else %}
+    {% csrf_token %}
+    {{ object_form.as_p }}
+    {{ address_form.as_p }}
 
-        <form id="object_form" method="post" action="/gospodarkaApp/add_object"
-                enctype="multipart/form-data">
-
-            {% csrf_token %}
-            {{ object_form.as_p }}
-            {{ address_form.as_p }}
-
-            <input type="submit" name="submit" value="Dodaj obiekt" />
-        </form>
-        {% endif %}
-    </body>
-</html>
+    <input type="submit" name="submit" value="Dodaj obiekt" />
+</form>
+{% endif %}
+{% endblock content %}

@@ -1,33 +1,20 @@
-<!DOCTYPE html>
-<html>
-    <head>
-        <title>Dobre Wydarzenie</title>
-<link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
-<link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap-theme.min.css">
-    </head>
-
-{% load staticfiles %}
-<link rel="stylesheet" href={% static "css\background.css" %}>
-
-    <body>
-        <h1>Obiekty</h1>
-
-        {% if objects %}
-            <ul>
-                {% for object in objects %}
-                <li><a href="/gospodarkaApp/object/{{object.id}}">{{object.name}}</a></li>
-                {% endfor %}
-            </ul>
-        {% else %}
-            <strong>Aktualnie nie posiadamy żadnych obiektów</strong>
-        {% endif %}
-        {% if is_manager %}
-            <div class="AddObject">
-              <a href="/gospodarkaApp/add_object">Dodaj nowy obiekt</a><br />
-            </div>
-        {% endif %}
-        <div class="Index">
-          <a href="/gospodarkaApp">Powrot do indexu</a><br />
-        </div>
-    </body>
-</html>
+{% extends "layout.html" %}
+{% block content %}
+<input id="searchInput" value="Type To Filter">
+<table id="keywords" border="1" style="width:100%">
+    <thead>
+        <tr>
+            <th class="sortable">Nazwa</th>
+            <th class="sortable">Miasto</th>
+        </tr>
+    </thead>
+    <tbody id="fbody">
+      {% for object in objects %}
+        <tr>
+            <td><a href="/gospodarkaApp/object/{{object.id}}">{{object.name}}</a></td>
+            <td>{{object.address.city}}</td>
+        </tr>
+      {% endfor %}
+    </tbody>
+</table>
+{% endblock content %}

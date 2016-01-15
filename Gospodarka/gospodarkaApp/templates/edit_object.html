@@ -1,29 +1,18 @@
-<!DOCTYPE html>
-<html>
-    <head>
-        <title>Dobre Wydarzenie</title>
-<link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
-<link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap-theme.min.css">
-    </head>
+{% extends "layout.html" %}
+{% block content %}
+{% if changed %}
+<div class="text">
+    Dane został zedytowane z sukcesem!<br/>
+{% else %}
 
-{% load staticfiles %}
-<link rel="stylesheet" href={% static "css\background.css" %}>
+<form id="object_form" method="post" action="/gospodarkaApp/edit_object/{{object_id}}/"
+    enctype="multipart/form-data" class="form">
 
-    <body>
-        {% if changed %}
-            Dane został zedytowane z sukcesem
-            <a href="/gospodarkaApp/objects">Powrót  do obiektów.</a><br />
-        {% else %}
+    {% csrf_token %}
+    {{ object_form.as_p }}
+    {{ address_form.as_p }}
 
-        <form id="object_form" method="post" action="/gospodarkaApp/edit_object/{{object_id}}/"
-                enctype="multipart/form-data">
-
-            {% csrf_token %}
-            {{ object_form.as_p }}
-            {{ address_form.as_p }}
-
-            <input type="submit" name="submit" value="Zmien obiekt" />
-        </form>
-        {% endif %}
-    </body>
-</html>
+    <input type="submit" name="submit" value="Zmien obiekt" />
+</form>
+{% endif %}
+{% endblock content %}
