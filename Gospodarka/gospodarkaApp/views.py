@@ -5,7 +5,7 @@ from operator import attrgetter
 from datetime import timedelta
 from datetime import datetime
 import hashlib, random
-from django.core.mail import send_mail
+# from django.core.mail import send_mail
 from Gospodarka.gospodarkaApp.models import Object, Address
 from Gospodarka.gospodarkaApp.forms import *
 from django.template import Context, loader, RequestContext
@@ -17,6 +17,7 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import Group
 from django.db.models import Q
 @ensure_csrf_cookie
+
 
 def index(request):
     if (request.user.is_authenticated()):
@@ -41,16 +42,11 @@ def register(request):
 
         if user_form.is_valid() and usr_form.is_valid() and address_form.is_valid():
             user = user_form.save(commit=False)
+            usr = usr_form.save(commit=False)
 
             user.set_password(user.password)
+
             # user.is_active = False
-            user.save()
-
-            address = address_form.save()
-
-            usr = usr_form.save(commit=False)
-            usr.user = user
-            usr.address = address
 
             # salt = hashlib.sha1(str(random.random()).encode('utf-8')).hexdigest()[:5]
             # activation_key = hashlib.sha1((salt+user.email).encode('utf-8')).hexdigest()
@@ -58,19 +54,26 @@ def register(request):
             # usr.activation_key = activation_key
             # usr.key_expires = key_expires
 
+            # email_subject = 'Account confirmation'
+            # email_body = "Hey %s, thanks for signing up. To activate your account, click this link within \
+            # 48hours http://127.0.0.1:8000/gospodarkaApp/confirm/%s" % (user.username, activation_key)
+            
+            # send_mail(email_subject, email_body, 'dobreWydarzenie@gospodarkaApp.com',
+            #     [user.email], fail_silently=False)
+
+            user.save()
+
+            address = address_form.save()
+
+            usr.user = user
+            usr.address = address
+
             usr.save()
 
             group = Group.objects.filter(name="Oridinary")
             if group:
                 user.groups.add(group[0].id)
                 user.save()
-
-            # email_subject = 'Account confirmation'
-            # email_body = "Hey %s, thanks for signing up. To activate your account, click this link within \
-            # 48hours http://127.0.0.1:8000/gospodarkaApp/confirm/%s" % (user.username, activation_key)
-
-            # send_mail(email_subject, email_body, 'dobreWydarzenie@gospodarkaApp.com',
-            #     [user.email], fail_silently=False)
 
             registered = True
 
