@@ -79,7 +79,7 @@ WSGI_APPLICATION = 'Gospodarka.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.oracle',
-        'NAME': 'STUDIA',
+        'NAME': 'OracleDatabase',
         'USER': 'gospodarrz',
         'PASSWORD': 'kochamJule1',
     }
