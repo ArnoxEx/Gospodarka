@@ -4,8 +4,9 @@
 <table id="keywords" border="1" style="width:100%">
     <thead>
         <tr>
-            <th class="sortable">Wydarzenie</th>
-            <th class="sortable">Status</th>
+            <th>Wydarzenie</th>
+            <th>status</th>
+            <th>ilość zamówień</th>
         </tr>
     </thead>
     <tbody id="fbody">
@@ -13,6 +14,7 @@
         <tr>
             <td>{{order.event.name}}</td>
             <td>{{order.status.value}}</td>
+            <td>{{order.numb}}</td>
         </tr>
       {% endfor %}
     </tbody>

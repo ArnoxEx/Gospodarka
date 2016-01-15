@@ -1,7 +1,7 @@
 {% extends "layout.html" %}
 {% block content %}
 {% if registered %}
-Rango says: <strong>Rejestracja przebiegła pomyślnie! Proszę wejść w link przesłany w mailu aby zakonczyć rejestracje</strong>
+<strong>Rejestracja przebiegła pomyślnie! Proszę wejść w link przesłany w mailu aby zakonczyć rejestrację</strong>
 {% else %}
 <form id="user_form" method="post" action="register"
         enctype="multipart/form-data" class="form">
