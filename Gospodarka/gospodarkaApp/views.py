@@ -43,7 +43,7 @@ def register(request):
             user = user_form.save(commit=False)
 
             user.set_password(user.password)
-            user.is_active = False
+            # user.is_active = False
             user.save()
 
             address = address_form.save()
@@ -52,11 +52,11 @@ def register(request):
             usr.user = user
             usr.address = address
 
-            salt = hashlib.sha1(str(random.random()).encode('utf-8')).hexdigest()[:5]            
-            activation_key = hashlib.sha1((salt+user.email).encode('utf-8')).hexdigest()            
-            key_expires = datetime.now() + timedelta(2)
-            usr.activation_key = activation_key
-            usr.key_expires = key_expires
+            # salt = hashlib.sha1(str(random.random()).encode('utf-8')).hexdigest()[:5]            
+            # activation_key = hashlib.sha1((salt+user.email).encode('utf-8')).hexdigest()            
+            # key_expires = datetime.now() + timedelta(2)
+            # usr.activation_key = activation_key
+            # usr.key_expires = key_expires
 
             usr.save()
 
@@ -65,12 +65,12 @@ def register(request):
                 user.groups.add(group[0].id)
                 user.save()
 
-            email_subject = 'Account confirmation'
-            email_body = "Hey %s, thanks for signing up. To activate your account, click this link within \
-            48hours http://127.0.0.1:8000/gospodarkaApp/confirm/%s" % (user.username, activation_key)
+            # email_subject = 'Account confirmation'
+            # email_body = "Hey %s, thanks for signing up. To activate your account, click this link within \
+            # 48hours http://127.0.0.1:8000/gospodarkaApp/confirm/%s" % (user.username, activation_key)
 
-            send_mail(email_subject, email_body, 'dobreWydarzenie@gospodarkaApp.com',
-                [user.email], fail_silently=False)
+            # send_mail(email_subject, email_body, 'dobreWydarzenie@gospodarkaApp.com',
+            #     [user.email], fail_silently=False)
 
             registered = True
 
