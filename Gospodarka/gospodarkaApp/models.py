@@ -32,7 +32,6 @@ class Event(models.Model):
     place = models.ForeignKey('Object', models.DO_NOTHING, db_column='place')
     max_tickets = models.IntegerField()
     time = models.DateField(default=datetime.now)
-    ticket_price = models.IntegerField(default=0)
 
     class Meta:
         managed = False
@@ -55,7 +54,6 @@ class Ordr(models.Model):
     event = models.ForeignKey(Event, models.DO_NOTHING, db_column='event')
     status = models.ForeignKey('Status', models.DO_NOTHING, db_column='status')
     numb = models.IntegerField(default=1)
-    price = models.IntegerField(default=0)
 
     class Meta:
         managed = False
@@ -77,8 +75,8 @@ class Usr(models.Model):
     id = models.AutoField(primary_key=True)
     address = models.ForeignKey(Address, models.DO_NOTHING, db_column='address')
     phone = models.CharField(max_length=64, blank=True, null=True)
-    # activation_key = models.CharField(max_length=40, blank=True)
-    # key_expires = models.DateTimeField(default=datetime.now)
+    activation_key = models.CharField(max_length=40, blank=True)
+    key_expires = models.DateTimeField(default=datetime.now)
 
     class Meta:
         managed = False

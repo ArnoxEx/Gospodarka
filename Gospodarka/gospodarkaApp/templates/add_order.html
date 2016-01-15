@@ -3,19 +3,17 @@
 {% if created %}
 <div class="text">
     Gratulacje, udało się stworzyć zamówienie!<br/>
-    Prosimy o przelanie kwoty {{price}} na poniższy numer konta:<br/>
-    26 1050 1445 1000 0022 7647 0461<br/>
 {% if event_id %}
     <a href="/gospodarkaApp/event/{{event_id}}" class="button">Powrót do wydarzenia.</a><br />
 {% endif %}
 </div>
 {% else %}
 {% if too_much %}
-<strong>Nie udało się utwórzyć zamówienia,
+<strong>Nie udało się utwórzyć zamówienia, 
     to wydarzenie nie posiada tylu wolnych biletów</strong>
 {% endif %}
 {% if too_little %}
-<strong>Nie udało się utwórzyć zamówienia,
+<strong>Nie udało się utwórzyć zamówienia, 
     zamówiono mniej niż jeden bilet</strong>
 {% endif %}
 

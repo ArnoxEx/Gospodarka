@@ -8,8 +8,7 @@
             <th class="sortable">Nazwa</th>
             <th class="sortable">Miejsce</th>
             <th class="sortable">ilość dostępnych biletów</th>
-            <th class="sortable">data</th>
-            <th class="sortable">cena biletu</th>
+            <th class="sortable">czas</th>
         </tr>
     </thead>
     <tbody id="fbody">
@@ -20,7 +19,6 @@
             <td>{{event.place.name}}</td>
             <td>{{event.max_tickets}}</td>
             <td>{{event.time}}</td>
-            <td>{{event.ticket_price}}</td>
         </tr>
       {% endfor %}
     </tbody>
