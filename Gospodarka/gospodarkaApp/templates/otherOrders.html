@@ -6,6 +6,7 @@
             <th>Wydarzenie</th>
             <th>status</th>
             <th>ilość zamówień</th>
+            <th>łączna cena zamówienia</th>
         </tr>
     </thead>
     <tbody id="fbody">
@@ -14,6 +15,7 @@
         <td>{{order.event.name}}</td>
         <td>{{order.status.value}}</td>
         <td>{{order.numb}}</td>
+        <td>{{order.price}}</td>
     </tr>
   {% endfor %}
     </tbody>
