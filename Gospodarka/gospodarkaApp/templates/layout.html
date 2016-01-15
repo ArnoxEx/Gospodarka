@@ -51,6 +51,11 @@
         <div class="Orders">
           <a href="/gospodarkaApp/orders" class="button">Zamówione bilety</a>
         </div>
+        {% if is_manager %}
+        <div class="otherOrders">
+          <a href="/gospodarkaApp/otherOrders" class="button">Zamówienia na twoje wydarzenia</a>
+        </div>
+        {% endif %}
         {% endif %}
       </div>
       <div class="columnRight" align="center">

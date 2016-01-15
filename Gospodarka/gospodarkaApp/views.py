@@ -95,40 +95,23 @@ def user_login(request):
         print(request.user.username)
     else:
         print("Youre not logged in")
-    # If the request is a HTTP POST, try to pull out the relevant information.
     if request.method == 'POST':
-        # Gather the usedrname and password provided by the user.
-        # This information is obtained from the login form.
         username = request.POST['username']
         password = request.POST['password']
 
-        # Use Django's machinery to attempt to see if the username/password
-        # combination is valid - a User object is returned if it is.
         user = authenticate(username=username, password=password)
 
-        # If we have a User object, the details are correct.
-        # If None (Python's way of representing the absence of a value), no user
-        # with matching credentials was found.
         if user:
-            # Is the account active? It could have been disabled.
             if user.is_active:
-                # If the account is valid and active, we can log the user in.
-                # We'll send the user back to the homepage.
                 login(request, user)
                 return HttpResponseRedirect('/gospodarkaApp/')
             else:
-                # An inactive account was used - no logging in!
                 return HttpResponse("Your account is disabled.")
         else:
-            # Bad login details were provided. So we can't log the user in.
             print ("Invalid login details: {0}, {1}".format(username, password))
             return HttpResponse("Invalid login details supplied.")
 
-    # The request is not a HTTP POST, so display the login form.
-    # This scenario would most likely be a HTTP GET.
     else:
-        # No context variables to pass to the template system, hence the
-        # blank dictionary object...
         return render_to_response('login.html', {}, context)
 
 @login_required
@@ -139,7 +122,7 @@ def user_logout(request):
 @login_required
 def edit_profile(request):
     context = RequestContext(request)
-    
+
     changed = False
     usr     = Usr.objects.get(user=request.user)
 
@@ -250,7 +233,7 @@ def object(request, object_id):
 
 def edit_object(request, object_id):
     context = RequestContext(request)
-    
+
     changed = False
     object = Object.objects.get(id=object_id)
 
@@ -324,7 +307,7 @@ def event(request, event_id):
     ticket_number = event.max_tickets
     orders = Ordr.objects.filter(event=event)
     for order in orders:
-        ticket_number = ticket_number - order.numb 
+        ticket_number = ticket_number - order.numb
 
     return render_to_response('event.html',
         {'event' : event, 'ticket_number' : ticket_number, 'is_manager' : is_manager}, context)
@@ -356,7 +339,7 @@ def add_event(request, object_id):
 
 def edit_event(request, event_id):
     context = RequestContext(request)
-    
+
     changed = False
     event = Event.objects.get(id=event_id)
 
@@ -409,6 +392,17 @@ def orders(request):
 
     return render_to_response('orders.html', context_dict, context)
 
+def otherOrders(request):
+    user = Usr.objects.get(user=request.user)
+    context = RequestContext(request)
+    objectsIds = Usrobject.objects.filter(usr=user).values_list('object')
+    events=Event.objects.filter(place__in=objectsIds).values_list('id')
+    orders = Ordr.objects.filter(event__in=events)
+    is_manager = request.user.groups.filter(name='Manager').exists()
+    context_dict = {'otherOrders' : orders, 'is_manager' : is_manager}
+
+    return render_to_response('otherOrders.html', context_dict, context)
+
 @login_required
 def add_order(request, event_id):
     context = RequestContext(request)
@@ -423,7 +417,6 @@ def add_order(request, event_id):
 
         if order_form.is_valid():
             order = order_form.save(commit=False)
-
             if order.numb < 1:
                 too_little = True
             else:

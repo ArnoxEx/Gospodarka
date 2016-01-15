@@ -1,0 +1,21 @@
+{% extends "layout.html" %}
+{% block content %}
+<table border="1" style="width:100%">
+    <thead>
+        <tr>
+            <th>Wydarzenie</th>
+            <th>status</th>
+            <th>ilość zamówień</th>
+        </tr>
+    </thead>
+    <tbody id="fbody">
+    {% for order in otherOrders %}
+    <tr>
+        <td>{{order.event.name}}</td>
+        <td>{{order.status.value}}</td>
+        <td>{{order.numb}}</td>
+    </tr>
+  {% endfor %}
+    </tbody>
+</table>
+{% endblock content %}
