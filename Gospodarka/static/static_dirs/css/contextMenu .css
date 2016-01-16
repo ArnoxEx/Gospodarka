@@ -1,0 +1,11 @@
+.contextmenu {
+    display: none;
+    position: absolute;
+    background: #333;
+    color: #ddd;
+    padding: 10px;
+    border: #333 1px solid;
+}
+.contextmenu.visible {
+    display: block;
+}

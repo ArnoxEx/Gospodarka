@@ -57,7 +57,7 @@ def register(request):
             # email_subject = 'Account confirmation'
             # email_body = "Hey %s, thanks for signing up. To activate your account, click this link within \
             # 48hours http://127.0.0.1:8000/gospodarkaApp/confirm/%s" % (user.username, activation_key)
-            
+
             # send_mail(email_subject, email_body, 'dobreWydarzenie@gospodarkaApp.com',
             #     [user.email], fail_silently=False)
 
@@ -157,7 +157,7 @@ def edit_profile(request):
         email_form   = EmailForm(  instance = request.user)
         usr_form     = UsrForm(    instance = usr)
         address_form = AddressForm(instance = usr.address)
-   
+
     is_manager = request.user.groups.filter(name='Manager').exists()
 
     return render_to_response('edit_profile.html'
@@ -413,7 +413,7 @@ def add_order(request, event_id):
     created = False
     too_much = False
     too_little = False
-
+    price = 0
 
     if request.method == 'POST':
         order_form = OrderForm(data=request.POST)
@@ -437,6 +437,8 @@ def add_order(request, event_id):
                     order.usr = usr
                     order.event = event
                     order.status = status
+                    order.price = event.ticket_price*order.numb
+                    price = order.price
                     order.save()
 
                     created = True
@@ -448,5 +450,10 @@ def add_order(request, event_id):
 
     is_manager = request.user.groups.filter(name='Manager').exists()
     return render_to_response('add_order.html',
-        {'order_form' : order_form, 'created': created, 'event_id' : event_id,
+        {'order_form' : order_form, 'created': created, 'event_id' : event_id, 'price' : price,
         'too_much' : too_much, 'too_little' : too_little, 'is_manager' : is_manager}, context)
+
+def dupa(request):
+    context = RequestContext(request)
+    print("JAAAAAAAAAAAAAAAAAAAAAAAAAAAAA PIERDOLE")
+    return render_to_response('otherOrders.html', {}, context)
