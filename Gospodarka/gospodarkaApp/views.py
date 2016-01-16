@@ -432,7 +432,7 @@ def add_order(request, event_id):
                     too_much = True
                 else:
                     usr = Usr.objects.get(user=request.user)
-                    status = Status.objects.get(value='Created')
+                    status = Status.objects.get(value='CREATED')
 
                     order.usr = usr
                     order.event = event
