@@ -18,7 +18,7 @@
         <td>{{order.numb}}</td>
         <td>{{order.price}}</td>
             <td>
-                {% if order.status.value == 'Created' %}
+                {% if order.status.value == 'CREATED' %}
                     <ul class="contextmenu">
                         <li>
                             <form id="otherOrderform" method="post" action="/gospodarkaApp/acceptOrder/{{order.id}}/"
