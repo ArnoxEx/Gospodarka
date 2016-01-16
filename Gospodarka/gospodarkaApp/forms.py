@@ -35,7 +35,7 @@ class EventForm(forms.ModelForm):
 
     class Meta:
         model = Event
-        fields = ('name', 'max_tickets',)
+        fields = ('name', 'max_tickets', 'ticket_price',)
 
 class OrderForm(forms.ModelForm):
     class Meta:
