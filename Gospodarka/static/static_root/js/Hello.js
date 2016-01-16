@@ -1,6 +1,4 @@
     var table = $('table');
-    alert("Dupa1");
-    $("#dupa").css( "border", "3px solid red" );
     $( ".sortable" ).css( "border", "3px solid red" );
     $(".sortable")
         .wrapInner('<span title="sort this column"/>')
@@ -10,7 +8,6 @@
                 inverse = false;
 
             th.click(function(){
-                alert("Dupa");
                 table.find('td').filter(function(){
 
                     return $(this).index() === thIndex;

@@ -7,6 +7,7 @@
             <th>status</th>
             <th>ilość zamówień</th>
             <th>łączna cena zamówienia</th>
+            <th>łOpcje</th>
         </tr>
     </thead>
     <tbody id="fbody">
@@ -16,17 +17,26 @@
         <td>{{order.status.value}}</td>
         <td>{{order.numb}}</td>
         <td>{{order.price}}</td>
-        <td>
-            <ul class="contextmenu">
-                <li>
-                    <form id="otherOrderform" method="post" action="dupa" enctype="multipart/form-data" class="form">
-                            {% csrf_token %}
-                        <input type="submit" name="submit" value="Zatwierdz" />
-                    </form>
-                </li>
-                <li><button>Odrzuć</button></li>
-            </ul>
-        <td>
+            <td>
+                {% if order.status.value == 'Created' %}
+                    <ul class="contextmenu">
+                        <li>
+                            <form id="otherOrderform" method="post" action="/gospodarkaApp/acceptOrder/{{order.id}}/"
+                                enctype="multipart/form-data" class="form">
+                                    {% csrf_token %}
+                                <input type="submit" name="submit" value="Zatwierdz" />
+                            </form>
+                        </li>
+                        <li>
+                            <form id="otherOrderform" method="post" action="/gospodarkaApp/rejectOrder/{{order.id}}/"
+                                enctype="multipart/form-data" class="form">
+                                    {% csrf_token %}
+                                <input type="submit" name="submit" value="Odrzuć" />
+                            </form></li>
+                    </ul>
+                {% endif %}
+            <td>
+
     </tr>
   {% endfor %}
     </tbody>

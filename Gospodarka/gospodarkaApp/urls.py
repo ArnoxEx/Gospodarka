@@ -21,6 +21,7 @@ url(r'^edit_event/(?P<event_id>\w+)/$',     edit_event,     name='edit_event'),
 url(r'^remove_event/(?P<event_id>\w+)/$',   remove_event,   name='remove_event'),
 url(r'^orders',                             orders,         name='orders'),
 url(r'^otherOrders',                        otherOrders,    name='otherOrders'),
-url(r'^dupa',                        dupa,    name='dupa'),
+url(r'^acceptOrder/(?P<order_id>\w+)/$',    acceptOrder,   name='acceptOrder'),
+url(r'^rejectOrder/(?P<order_id>\w+)/$',    rejectOrder,   name='rejectOrder'),
 url(r'^add_order/(?P<event_id>\w+)/$',      add_order,      name='add_order'),
 )

@@ -453,7 +453,32 @@ def add_order(request, event_id):
         {'order_form' : order_form, 'created': created, 'event_id' : event_id, 'price' : price,
         'too_much' : too_much, 'too_little' : too_little, 'is_manager' : is_manager}, context)
 
-def dupa(request):
+def acceptOrder(request, order_id):
     context = RequestContext(request)
-    print("JAAAAAAAAAAAAAAAAAAAAAAAAAAAAA PIERDOLE")
-    return render_to_response('otherOrders.html', {}, context)
+    order = Ordr.objects.get(id=order_id)
+    status = Status.objects.get(value='ACCEPTED')
+    order.status = status
+    order.save()
+    user = Usr.objects.get(user=request.user)
+    objectsIds = Usrobject.objects.filter(usr=user).values_list('object')
+    events=Event.objects.filter(place__in=objectsIds).values_list('id')
+    orders = Ordr.objects.filter(event__in=events)
+    is_manager = request.user.groups.filter(name='Manager').exists()
+    context_dict = {'otherOrders' : orders, 'is_manager' : is_manager}
+
+    return render_to_response('otherOrders.html', context_dict, context)
+
+def rejectOrder(request, order_id):
+    context = RequestContext(request)
+    order = Ordr.objects.get(id=order_id)
+    status = Status.objects.get(value='REJECTED')
+    order.status = status
+    order.save()
+    user = Usr.objects.get(user=request.user)
+    objectsIds = Usrobject.objects.filter(usr=user).values_list('object')
+    events=Event.objects.filter(place__in=objectsIds).values_list('id')
+    orders = Ordr.objects.filter(event__in=events)
+    is_manager = request.user.groups.filter(name='Manager').exists()
+    context_dict = {'otherOrders' : orders, 'is_manager' : is_manager}
+
+    return render_to_response('otherOrders.html', context_dict, context)
