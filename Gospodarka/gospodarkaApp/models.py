@@ -21,9 +21,17 @@ class Address(models.Model):
     name_regex = re.compile(r'^[A-ZŁĄŻŹĆĘŃÓĘ][\x20a-złążźćęńóęA-ZŁĄŻŹĆĘŃÓĘ]+$', re.UNICODE)
     name_validator = RegexValidator(regex=name_regex, message=err_msg)
     city = models.CharField(max_length=64, validators=[name_validator])
-    street = models.CharField(max_length=64)
-    numb = models.CharField(max_length=20)
-    postal_code = models.CharField(max_length=20)
+    street = models.CharField(max_length=64, validators=[name_validator])
+
+    err_msg = "Numery mieszkan moga sie skladac z liter, cyfr i znaku '/'".encode("utf-8")
+    numb_regex = re.compile(r'^[a-zA-Z0-9/]+$', re.UNICODE)
+    numb_validator = RegexValidator(regex=numb_regex, message=err_msg)
+    numb = models.CharField(max_length=20, validators=[numb_validator])
+
+    err_msg = "Kod pocztowy sklada sie z cyfr oddzielonych myslnikiem: xx-xxx".encode("utf-8")
+    posta_regex = re.compile(r'^\d\d-\d\d\d$', re.UNICODE)
+    posta_validator = RegexValidator(regex=posta_regex, message=err_msg)
+    postal_code = models.CharField(max_length=6, validators=[posta_validator])
 
     def full_address(self):
         return 'ul. ' + street + numb + ', ' + city + postal_code
