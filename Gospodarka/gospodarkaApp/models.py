@@ -1,3 +1,5 @@
+# -*- coding: utf-8 -*-
+
 # This is an auto-generated Django model module.
 # You'll have to do the following manually to clean this up:
 #   * Rearrange models' order
@@ -9,11 +11,16 @@ from __future__ import unicode_literals
 
 from django.db import models
 from django.contrib.auth.models import User
+from django.core.validators import RegexValidator
 from datetime import datetime
+import re
 
 class Address(models.Model):
     id = models.AutoField(primary_key=True)
-    city = models.CharField(max_length=64)
+    err_msg = "Nazwy miast moga skladac sie wylacznie z liter i nie moga byc krotsze niz dwie litery".encode("utf-8")
+    name_regex = re.compile(r'^[A-ZŁĄŻŹĆĘŃÓĘ][\x20a-złążźćęńóęA-ZŁĄŻŹĆĘŃÓĘ]+$', re.UNICODE)
+    name_validator = RegexValidator(regex=name_regex, message=err_msg)
+    city = models.CharField(max_length=64, validators=[name_validator])
     street = models.CharField(max_length=64)
     numb = models.CharField(max_length=20)
     postal_code = models.CharField(max_length=20)
@@ -30,9 +37,9 @@ class Event(models.Model):
     id = models.AutoField(primary_key=True)
     name = models.CharField(max_length=64)
     place = models.ForeignKey('Object', models.DO_NOTHING, db_column='place')
-    max_tickets = models.IntegerField()
+    max_tickets = models.PositiveIntegerField()
     time = models.DateField(default=datetime.now)
-    ticket_price = models.IntegerField(default=0)
+    ticket_price = models.PositiveIntegerField(default=0)
 
     class Meta:
         managed = False
@@ -54,8 +61,8 @@ class Ordr(models.Model):
     usr = models.ForeignKey('Usr', models.DO_NOTHING, db_column='usr')
     event = models.ForeignKey(Event, models.DO_NOTHING, db_column='event')
     status = models.ForeignKey('Status', models.DO_NOTHING, db_column='status')
-    numb = models.IntegerField(default=1)
-    price = models.IntegerField(default=0)
+    numb = models.PositiveIntegerField(default=1)
+    price = models.PositiveIntegerField(default=0)
 
     class Meta:
         managed = False
@@ -76,7 +83,10 @@ class Usr(models.Model):
 
     id = models.AutoField(primary_key=True)
     address = models.ForeignKey(Address, models.DO_NOTHING, db_column='address')
-    phone = models.CharField(max_length=64, blank=True, null=True)
+    phone_regex = RegexValidator(regex=r'^\+48\d{9}$',
+        message="Numer telefonu musi byc formatu: +48xxxxxxxxx.")
+    phone = models.CharField(validators=[phone_regex], blank=True, null=True, default='+48',
+        max_length=12)
     # activation_key = models.CharField(max_length=40, blank=True)
     # key_expires = models.DateTimeField(default=datetime.now)
 
