@@ -7,7 +7,8 @@
             <th>status</th>
             <th>ilość zamówień</th>
             <th>łączna cena zamówienia</th>
-            <th>łOpcje</th>
+            <th>Zamawiający</th>
+            <th>Opcje</th>
         </tr>
     </thead>
     <tbody id="fbody">
@@ -17,6 +18,7 @@
         <td>{{order.status.value}}</td>
         <td>{{order.numb}}</td>
         <td>{{order.price}}</td>
+        <td>{{order.ordered_by}}</td>
             <td>
                 {% if order.status.value == 'CREATED' %}
                     <ul class="contextmenu">

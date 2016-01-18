@@ -71,6 +71,7 @@ class Ordr(models.Model):
     status = models.ForeignKey('Status', models.DO_NOTHING, db_column='status')
     numb = models.PositiveIntegerField(default=1)
     price = models.PositiveIntegerField(default=0)
+    ordered_by = models.CharField(max_length=80)
 
     class Meta:
         managed = False

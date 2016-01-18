@@ -439,6 +439,7 @@ def add_order(request, event_id):
                     order.status = status
                     order.price = event.ticket_price*order.numb
                     price = order.price
+                    order.ordered_by = request.user.username
                     order.save()
 
                     created = True
