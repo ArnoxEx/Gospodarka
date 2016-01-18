@@ -2,11 +2,14 @@
 {% block content %}
 <form id="login_form" method="post" action="login" class="form" align="center">
     {% csrf_token %}
-    Nazwa użytkownika: <input type="text" name="username" value="" size="50" />
+    Nazwa użytkownika: <input id="userLogin" type="text" name="username" value="" size="50" />
+    <br />
+    <div id="emptyLogin" style="display:none">Login is empty</div>
     <br />
     Hasło: <input type="password" name="password" value="" size="50" />
     <br />
 
-    <input type="submit" value="submit" />
+    <input id="submitLogin" type="submit" value="submit" />
 </form>
+
 {% endblock content %}

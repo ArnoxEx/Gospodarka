@@ -79,19 +79,19 @@ $(function () {
     });
 });
 
-    // var frm = $('#otherOrderform');
-    // frm.submit(function () {
-    //     $.ajax({
-    //         type: frm.attr('method'),
-    //         url: frm.attr('action'),
-    //         data: frm.serialize(),
-    //         success: function (data) {
-    //              alert('test')
-    //         },
-    //         error: function(data) {
-    //              alert("Error");
-    //         }
-    //     });
-    //     return false;
-    // });
+$('#userLogin').blur(function()
+{
+      if( !this.value ) {
+        $("#emptyLogin").css('color', 'red');
+        $("#emptyLogin").css('display', 'initial');
+        $("#submitLogin").prop('disabled', true);
+      }
+      else
+      {
+        $("#emptyLogin").css('color', 'blue');
+        $("#emptyLogin").css('display', 'none');
+        $("#submitLogin").prop('disabled', false);
+      }
+});
+
 });
