@@ -32,9 +32,11 @@ body {
 }
 
 .text {
-    color: grey
+    color: #5F5F72;
+    font-weight: 900;
 }
 
 .form {
-    color: grey
+    color: #5F5F72;
+    font-weight: 900;
 }

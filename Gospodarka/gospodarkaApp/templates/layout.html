@@ -23,38 +23,38 @@
       <div class="columnLeft" align="left">
         {% if user.is_authenticated %}
           <div class="Edit">
-            <a href="/gospodarkaApp/edit_profile" class="button">Edytuj profil</a>
+            <a href="/gospodarkaApp/edit_profile" class="button full_size">Edytuj profil</a>
           </div>
           <div class="Logout">
-            <a href="/gospodarkaApp/logout" class="button">Wyloguj</a>
+            <a href="/gospodarkaApp/logout" class="button full_size">Wyloguj</a>
           </div>
         {% else %}
           <div class="Login">
-            <a href="/gospodarkaApp/login" class="button">Zaloguj się</a>
+            <a href="/gospodarkaApp/login" class="button full_size">Zaloguj się</a>
           </div>
           <div class="Register">
-            <a href="/gospodarkaApp/register" class="button">Zarejestruj się</a>
+            <a href="/gospodarkaApp/register" class="button full_size">Zarejestruj się</a>
           </div>
         {% endif %}
         <br />
         <div class="Objects">
-          <a href="/gospodarkaApp/objects" class="button">Obiekty</a>
+          <a href="/gospodarkaApp/objects" class="button full_size">Obiekty</a>
         </div>
         {% if is_manager %}
         <div class="Objects">
-          <a href="/gospodarkaApp/user_objects" class="button">Twoje obiekty</a>
+          <a href="/gospodarkaApp/user_objects" class="button full_size">Twoje obiekty</a>
         </div>
         {% endif %}
         <div class="Events">
-          <a href="/gospodarkaApp/events" class="button">Wydarzenia</a>
+          <a href="/gospodarkaApp/events" class="button full_size">Wydarzenia</a>
         </div>
         {% if user.is_authenticated %}
         <div class="Orders">
-          <a href="/gospodarkaApp/orders" class="button">Zamówione bilety</a>
+          <a href="/gospodarkaApp/orders" class="button full_size">Zamówione bilety</a>
         </div>
         {% if is_manager %}
         <div class="otherOrders">
-          <a href="/gospodarkaApp/otherOrders" class="button">Zamówienia na twoje wydarzenia</a>
+          <a href="/gospodarkaApp/otherOrders" class="button full_size">Zamówienia na twoje wydarzenia</a>
         </div>
         {% endif %}
         {% endif %}

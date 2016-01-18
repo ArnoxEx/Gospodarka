@@ -16,5 +16,8 @@
         </tr>
       {% endfor %}
     </tbody>
+    {% if is_manager %}
+        <a href="/gospodarkaApp/add_object/" class="button">Dodaj obiekt</a>
+    {% endif %}
 </table>
 {% endblock content %}
