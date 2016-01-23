@@ -1,2 +1,3 @@
 Gospodarka/settings.py
 Gospodarka/__pycache__/
+*.pyc
